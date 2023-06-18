@@ -6,14 +6,20 @@ import { PageContainer } from "./styled-components";
 export const Page: FC = () => {
   const [selectedLetter, setSelectedLetter] = useState("");
   const [currentBlock, setCurrentBlock] = useState(0);
+  const [enableInput, setEnableInput] = useState(true);
   return (
     <>
       <PageContainer>
-        <Board selectedLetter={selectedLetter} currentBlock={currentBlock} />
+        <Board
+          selectedLetter={selectedLetter}
+          currentBlock={currentBlock}
+          setEnableInput={setEnableInput}
+        />
         <Keyboard
           setSelectedLetter={setSelectedLetter}
           setCurrentBlock={setCurrentBlock}
           currentBlock={currentBlock}
+          enableInput={enableInput}
         />
       </PageContainer>
     </>
