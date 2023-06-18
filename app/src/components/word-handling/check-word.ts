@@ -1,18 +1,5 @@
 import axios from "axios";
-import { IGuess } from "./types";
 import { reqUrl } from "../../constants/merriam-webster";
-
-export const concatenateValues = (
-  start: number,
-  end: number,
-  arr: IGuess[]
-) => {
-  const selectedGuesses = arr.slice(start, end);
-  const concatenatedString = selectedGuesses
-    .map((entry) => entry.value)
-    .join("");
-  return concatenatedString;
-};
 
 export const checkWord = async (word: string) => {
   try {

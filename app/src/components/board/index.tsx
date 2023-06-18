@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { BlankSquare, BoardGrid } from "./styled-components";
-import { checkWord, concatenateValues } from "./check-word";
+import { concatenateLetters } from "../word-handling/concat-letters";
+import { checkWord } from "../word-handling/check-word";
 
 interface IBoard {
   selectedLetter: string;
@@ -31,7 +32,7 @@ export const Board: FC<IBoard> = ({
   useEffect(() => {
     if (currentBlock % 6 === 0) {
       setEnableInput(false);
-      enterGuess(concatenateValues(currentBlock - 6, currentBlock, guesses));
+      enterGuess(concatenateLetters(currentBlock - 6, currentBlock, guesses));
     }
   }, [guesses, setEnableInput]);
 
