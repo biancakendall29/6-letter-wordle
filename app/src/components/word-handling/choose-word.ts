@@ -1,4 +1,4 @@
-const wordList = require("../../payloads/word-list.json");
+import wordList from "../../payloads/word-list.json";
 
 // TODO backend call
 const alreadyChosen: number[] = [0];
