@@ -22,4 +22,4 @@ const wordSchema = new mongoose.Schema(
 
 const Word = mongoose.model("Word", wordSchema);
 
-export default Word;
+module.exports = Word;

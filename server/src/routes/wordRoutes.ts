@@ -1,15 +1,12 @@
 import express from "express";
-import { updateWord } from "..//controllers/wordListController";
-import { createWord } from "..//controllers/wordListController";
-import { getUsedWordList } from "../controllers/wordListController";
-import { getWordList } from "../controllers/wordListController";
+const wordListController = require("../controllers/wordListController");
 
 const router = express.Router();
 
-router.route("/").get(getWordList);
-router.route("/used").get(getUsedWordList);
+router.route("/").get(wordListController.getWordList);
+router.route("/used").get(wordListController.getUsedWordList);
 
-router.route("/").post(createWord);
-router.route("/:id").patch(updateWord);
+router.route("/").post(wordListController.createWord);
+router.route("/:id").patch(wordListController.updateWord);
 
-export default router;
+module.exports = router;

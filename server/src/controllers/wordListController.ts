@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import Word from "../models/wordModel";
+const Word = require("../models/wordModel");
 
-export const getWordList = async (req: Request, res: Response) => {
+module.exports.getWordList = async (req: Request, res: Response) => {
   const words = await Word.find();
 
   res.status(200).json({
@@ -10,7 +10,7 @@ export const getWordList = async (req: Request, res: Response) => {
   });
 };
 
-export const getUsedWordList = async (req: Request, res: Response) => {
+module.exports.getUsedWordList = async (req: Request, res: Response) => {
   const words = await Word.find({ used: true });
 
   res.status(200).json({
@@ -19,7 +19,7 @@ export const getUsedWordList = async (req: Request, res: Response) => {
   });
 };
 
-export const createWord = async (req: Request, res: Response) => {
+module.exports.createWord = async (req: Request, res: Response) => {
   const newWord = await Word.create(req.body);
 
   res.status(200).json({
@@ -28,7 +28,7 @@ export const createWord = async (req: Request, res: Response) => {
   });
 };
 
-export const updateWord = async (
+module.exports.updateWord = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -38,7 +38,7 @@ export const updateWord = async (
   });
 
   if (!word) {
-    return next(new Error("No tour found with that ID"));
+    return new Error("No tour found with that ID");
   }
 
   res.status(200).json({
