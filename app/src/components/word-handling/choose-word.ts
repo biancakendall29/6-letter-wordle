@@ -1,11 +1,11 @@
-// TODO backend call
-// const alreadyChosen: number[] = [0];
+import axios from "axios";
 
-// export const chooseWord = () => {
-//   let arrIndex = Math.floor(Math.random() * (wordList.length - 0) + 0);
-//   if (!alreadyChosen.includes(arrIndex)) {
-//     alreadyChosen.push(arrIndex);
-//     return wordList[arrIndex];
-//   }
-//   chooseWord();
-// };
+export const getTodaysWord = async () => {
+  const baseUrl = process.env.REACT_APP_SERVER_URL;
+  try {
+    const res = await axios.get(`${baseUrl}word-of-the-day`);
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};

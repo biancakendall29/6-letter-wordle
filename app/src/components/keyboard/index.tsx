@@ -27,8 +27,19 @@ export const Keyboard: FC<IKeyboard> = ({
     setCurrentBlock(currentBlock + 1);
   };
 
-  const handleBackspace = async (e: any) => {
-    console.log("BACK");
+  const handleBackspace = async () => {
+    await handleBackspaceLetter();
+    await handleBackspaceBlock();
+  };
+
+  const handleBackspaceLetter = async () => {
+    setSelectedLetter("");
+    return;
+  };
+
+  const handleBackspaceBlock = async () => {
+    setCurrentBlock(currentBlock - 1);
+    return;
   };
 
   const generateKey = (values: string[]) => {

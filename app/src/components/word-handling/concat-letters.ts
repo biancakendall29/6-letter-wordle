@@ -6,6 +6,8 @@ export const concatenateLetters = (
   arr: IGuess[]
 ) => {
   const selectedGuesses = arr.slice(start, end);
+  console.log("selected", selectedGuesses);
+
   const concatenatedString = selectedGuesses
     .map((entry) => entry.value)
     .join("");

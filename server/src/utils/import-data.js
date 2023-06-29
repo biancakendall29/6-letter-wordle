@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const Word = require("../models/wordModel.ts");
 
-dotenv.config({ path: "../../.env" });
+dotenv.config({ path: "../../config.env" });
 
 const DB = process.env.DATABASE;
 
