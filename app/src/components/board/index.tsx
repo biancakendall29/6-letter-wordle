@@ -24,14 +24,18 @@ interface IBoard {
   selectedLetter: string;
   currentBlock: number;
   setEnableInput: Dispatch<SetStateAction<boolean>>;
+  enterClicked: boolean;
+  setEnterClicked: Dispatch<SetStateAction<boolean>>;
 }
 
 export const Board: FC<IBoard> = ({
   selectedLetter,
   currentBlock,
   setEnableInput,
+  enterClicked,
+  setEnterClicked,
 }) => {
-  const [guesses, setGuesses] = useState(() => {
+  const [inputs, setInputs] = useState(() => {
     const initialArray = [];
     for (let i = 1; i <= 36; i++) {
       initialArray.push({ id: i, value: "", colour: TileColours.CLEAR });
@@ -46,14 +50,14 @@ export const Board: FC<IBoard> = ({
     return initialArray;
   });
   const [blocks, setBlocks] = useState<JSX.Element[]>(() =>
-    guesses.map((entry) => (
+    inputs.map((entry) => (
       <BlankSquare id={`${entry.id}`} key={`front-${entry.id}`}>
         {entry.value}
       </BlankSquare>
     ))
   );
   const [backBlocks, setBackBlocks] = useState<JSX.Element[]>(() =>
-    guesses.map((entry) => (
+    inputs.map((entry) => (
       <BlankSquare id={`${entry.id}`} key={`back-${entry.id}`}>
         {entry.value}
       </BlankSquare>
@@ -71,22 +75,22 @@ export const Board: FC<IBoard> = ({
   const [alertNonExistingWord, setAlertNonExistingWord] = useState(false);
 
   useEffect(() => {
-    setGuesses((prevGuesses) =>
-      prevGuesses.map((entry) =>
+    setInputs((prevInputs) =>
+      prevInputs.map((entry) =>
         entry.id === currentBlock ? { ...entry, value: selectedLetter } : entry
       )
     );
   }, [selectedLetter, currentBlock]);
 
   useEffect(() => {
-    if (currentBlock % 6 === 0 && currentBlock !== 0) {
+    if (enterClicked) {
       setGuessNumber(currentBlock);
-      enterGuess(concatenateLetters(currentBlock - 6, currentBlock, guesses));
+      enterGuess(concatenateLetters(currentBlock - 6, currentBlock, inputs));
     }
-  }, [currentBlock, guesses]);
+  }, [currentBlock, inputs, enterClicked]);
 
   useEffect(() => {
-    const updatedBlocks = guesses.map((entry) => (
+    const updatedBlocks = inputs.map((entry) => (
       <BlankSquare
         id={`${entry.id}`}
         key={`front-${entry.id}`}
@@ -98,7 +102,7 @@ export const Board: FC<IBoard> = ({
       </BlankSquare>
     ));
     setBlocks(updatedBlocks);
-  }, [guesses]);
+  }, [inputs]);
 
   useEffect(() => {
     const updatedBlocks = blockColours.map((entry, i) => (
@@ -110,14 +114,14 @@ export const Board: FC<IBoard> = ({
         column={entry.id % 6 === 0 ? 6 : entry.id % 6}
       >
         {
-          guesses.find((el) => {
-            return el.id === i + 1;
-          })?.value
+          blocks.find((_, index) => {
+            return index === i;
+          })?.props.children
         }
       </BackBlankSquare>
     ));
     setBackBlocks(updatedBlocks);
-  }, [tileColours, blockColours]);
+  }, [tileColours, blockColours, blocks]);
 
   const flipTile = (tileColour: TileColours, guessIndex: number) => {
     const updatedBlocks = blockColours.map((block) => {
@@ -129,7 +133,6 @@ export const Board: FC<IBoard> = ({
     setBlockColours(updatedBlocks);
     return;
   };
-  console.log(currentBlock);
 
   useEffect(() => {
     let j = 0;
@@ -141,13 +144,15 @@ export const Board: FC<IBoard> = ({
 
   const enterGuess = async (guess: string) => {
     let correct = await checkWord(guess);
-    console.log(correct);
+
     if (correct) {
       setTileColours(checkForMatch(guess));
+      setEnableInput(true);
     } else {
       setAlertNonExistingWord(true);
       setEnableInput(false);
     }
+    setEnterClicked(false);
   };
 
   useEffect(() => {

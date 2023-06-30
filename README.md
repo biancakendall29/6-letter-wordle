@@ -15,3 +15,10 @@ In the project directory /app, you can run:
 
 Builds and runs the app in development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## Next Steps
+
+- Implement Redux state management
+- Media queries for different device sizes (mobile-first design at present)
+- Implement light / dark theming
+- Use device's keyboard instead of keyboard component

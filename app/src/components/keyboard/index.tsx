@@ -15,6 +15,8 @@ interface IKeyboard {
   setCurrentBlock: Dispatch<SetStateAction<number>>;
   currentBlock: number;
   enableInput: boolean;
+  setEnableInput: Dispatch<SetStateAction<boolean>>;
+  setEnterClicked: Dispatch<SetStateAction<boolean>>;
 }
 
 export const Keyboard: FC<IKeyboard> = ({
@@ -23,6 +25,8 @@ export const Keyboard: FC<IKeyboard> = ({
   setCurrentBlock,
   currentBlock,
   enableInput,
+  setEnableInput,
+  setEnterClicked,
 }) => {
   const keyboardKeys = require("../../payloads/keyboard-keys.json");
   const [backspaceCount, setBackspaceCount] = useState(0);
@@ -44,11 +48,20 @@ export const Keyboard: FC<IKeyboard> = ({
   const handleBackspace = async () => {
     setSelectedLetter("");
     setBackspaceCount(backspaceCount + 1);
+    setEnableInput(true);
   };
 
   const handleEnter = async () => {
-    // TODO
+    console.log("enter clicked");
+    setEnterClicked(true);
+    setBackspaceCount(0);
   };
+
+  useEffect(() => {
+    if (currentBlock % 6 === 0 && currentBlock !== 0 && backspaceCount < 1) {
+      setEnableInput(false);
+    }
+  }, [backspaceCount, currentBlock, setEnableInput]);
 
   const generateKey = (values: string[]) => {
     const arr = [];
@@ -78,6 +91,11 @@ export const Keyboard: FC<IKeyboard> = ({
           value={"Back"}
           key="square-backspace"
           onClick={handleBackspace}
+          disabled={
+            (currentBlock % 6 === 1 && currentBlock !== 1) ||
+            currentBlock === 0 ||
+            (currentBlock === 1 && selectedLetter === "")
+          }
         >
           <img alt="Backspace" src="/img/backspace_icon.png" width="130%" />
         </BackspaceSquare>
@@ -88,6 +106,7 @@ export const Keyboard: FC<IKeyboard> = ({
           value={"Enter"}
           key="square-enter"
           onClick={handleEnter}
+          disabled={currentBlock % 6 !== 0 || currentBlock === 0}
         >
           <img alt="Backspace" src="/img/enter_icon.png" width="130%" />
         </EnterSquare>
