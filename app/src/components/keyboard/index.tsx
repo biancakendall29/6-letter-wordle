@@ -1,6 +1,8 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import {
   BackspaceSquare,
+  EnterSquare,
+  KeyboardContainer,
   KeyboardRow1,
   KeyboardRow2,
   KeyboardRow3,
@@ -44,6 +46,10 @@ export const Keyboard: FC<IKeyboard> = ({
     setBackspaceCount(backspaceCount + 1);
   };
 
+  const handleEnter = async () => {
+    // TODO
+  };
+
   const generateKey = (values: string[]) => {
     const arr = [];
     for (let i = 0; i < values.length; i++) {
@@ -73,17 +79,29 @@ export const Keyboard: FC<IKeyboard> = ({
           key="square-backspace"
           onClick={handleBackspace}
         >
-          Back
+          <img alt="Backspace" src="/img/backspace_icon.png" width="130%" />
         </BackspaceSquare>
+      );
+      keyboard[2].unshift(
+        <EnterSquare
+          id="enter"
+          value={"Enter"}
+          key="square-enter"
+          onClick={handleEnter}
+        >
+          <img alt="Backspace" src="/img/enter_icon.png" width="130%" />
+        </EnterSquare>
       );
     }
   }
 
   return (
     <>
-      <KeyboardRow1>{keyboard[0]}</KeyboardRow1>
-      <KeyboardRow2>{keyboard[1]}</KeyboardRow2>
-      <KeyboardRow3>{keyboard[2]}</KeyboardRow3>
+      <KeyboardContainer>
+        <KeyboardRow1>{keyboard[0]}</KeyboardRow1>
+        <KeyboardRow2>{keyboard[1]}</KeyboardRow2>
+        <KeyboardRow3>{keyboard[2]}</KeyboardRow3>
+      </KeyboardContainer>
     </>
   );
 };

@@ -1,55 +1,86 @@
 import styled from "styled-components";
+import { defaultTheme } from "../../constants/theme";
+
+export const KeyboardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${defaultTheme.backgroundPrimary};
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 4rem;
+`;
 
 export const KeyboardRow1 = styled.div`
   display: grid;
-  grid-template-columns: repeat(10, 70px);
-  grid-template-rows: repeat(1, 70px);
-  grid-gap: 10px;
+  grid-template-columns: repeat(10, 2rem);
+  grid-template-rows: repeat(1, 3rem);
+  grid-gap: 0.2rem;
   width: fit-content;
   height: fit-content;
-  background-color: #2b303a;
+  background-color: ${defaultTheme.backgroundPrimary};
   margin-top: 40px;
-  align-items: center;
+  text-align: center;
 `;
 
 export const KeyboardRow2 = styled.div`
   display: grid;
-  grid-template-columns: repeat(9, 70px);
-  grid-template-rows: repeat(1, 70px);
-  grid-gap: 10px;
+  grid-template-columns: repeat(9, 2rem);
+  grid-template-rows: repeat(1, 3rem);
+  grid-gap: 0.2rem;
   width: fit-content;
   height: fit-content;
-  background-color: #2b303a;
+  background-color: ${defaultTheme.backgroundPrimary};
   margin-top: 20px;
   align-items: center;
+  justify-content: center;
 `;
 
 export const KeyboardRow3 = styled.div`
   display: grid;
-  grid-template-columns: repeat(9, 70px);
-  grid-template-rows: repeat(1, 70px);
-  grid-gap: 10px;
+  grid-template-columns: repeat(9, 2rem);
+  grid-template-rows: repeat(1, 3rem);
+  grid-gap: 0.2rem;
   width: fit-content;
   height: fit-content;
-  background-color: #2b303a;
+  background-color: ${defaultTheme.backgroundPrimary};
   margin-top: 20px;
   align-items: center;
 `;
 
 export const KeyboardSquare = styled.button`
-  background-color: #b8b8b8;
+  background-color: ${defaultTheme.backgroundSecondary};
+  color: ${defaultTheme.textSecondary};
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
-  aspect-ratio: 1 / 1;
+  border-radius: ${defaultTheme.borderRadius};
+  width: 100%;
+  height: 100%;
 `;
 
 export const BackspaceSquare = styled.button`
-  background-color: #b8b8b8;
-  text-align: center;
-  font-size: 2rem;
-  text-transform: uppercase;
-  grid-column: 8 / 10;
+  background-color: ${defaultTheme.backgroundSecondary};
+  color: ${defaultTheme.textSecondary};
+  border-radius: ${defaultTheme.borderRadius};
+  grid-column: 9 / 9;
   grid-row: 1 / 1;
+  width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const EnterSquare = styled.button`
+  background-color: ${defaultTheme.backgroundSecondary};
+  color: ${defaultTheme.textSecondary};
+  border-radius: ${defaultTheme.borderRadius};
+  grid-column: 1 / 1;
+  grid-row: 1 / 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

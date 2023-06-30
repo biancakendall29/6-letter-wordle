@@ -9,6 +9,7 @@ import {
 import {
   BackBlankSquare,
   BlankSquare,
+  BoardContainer,
   BoardGrid,
   BoardWrapper,
 } from "./styled-components";
@@ -163,12 +164,14 @@ export const Board: FC<IBoard> = ({
 
   return (
     <>
-      {alertNonExistingWord && (
-        <Alert message="Not in word list !" type={AlertTypes.warning} />
-      )}
-      <BoardWrapper>
-        <BoardGrid>{allBlocks}</BoardGrid>
-      </BoardWrapper>
+      <BoardContainer>
+        {alertNonExistingWord && (
+          <Alert message="Not in word list !" type={AlertTypes.warning} />
+        )}
+        <BoardWrapper>
+          <BoardGrid>{allBlocks}</BoardGrid>
+        </BoardWrapper>
+      </BoardContainer>
     </>
   );
 };

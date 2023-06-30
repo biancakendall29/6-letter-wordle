@@ -6,5 +6,5 @@ export interface IGuess {
 export enum TileColours {
   GREEN = "green",
   ORANGE = "orange",
-  CLEAR = "#b8b8b8",
+  CLEAR = "transparent",
 }

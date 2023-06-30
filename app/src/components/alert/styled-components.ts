@@ -1,30 +1,31 @@
 import styled from "styled-components";
 import { AlertTypes } from "./types";
+import { defaultTheme } from "../../constants/theme";
 
 export const AlertContainer = styled.div<{
   type: AlertTypes;
-  width?: string;
-  margin?: string;
-  padding?: string;
 }>`
-  background: #2b303a;
-  border: ${({ type }) => `4px solid ${type}`};
+  background: transparent;
+  border: ${({ type }) => `2px solid ${type}`};
+  position: absolute;
   display: flex;
-  width: ${({ width }) => width ?? "50%"};
-  padding: ${({ padding }) => padding ?? "20px 10px"};
-  margin: ${({ margin }) => margin ?? "20px auto 0px auto"};
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  height: 3rem;
+  top: 1.5rem;
+  z-index: 10;
 `;
 
 export const TextContainer = styled.div`
-  padding-left: 10px;
-  & > *:last-child {
-    margin-bottom: 0;
-  }
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
 `;
 
 export const Paragraph = styled.p`
-  color: #b8b8b8;
-  line-height: 1.5;
+  color: ${defaultTheme.textPrimary};
+  line-height: 2rem;
 `;
 
 export const CloseContainer = styled.div`
