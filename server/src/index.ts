@@ -10,7 +10,7 @@ const port = process.env.SERVER_PORT || "8000";
 app.use(cors());
 app.use("/", wordRouter);
 
-dotenv.config({ path: "../config.env" });
+dotenv.config({ path: "../.env" });
 const DB = process.env.DATABASE;
 
 mongoose.connect(DB).then(() => console.log("DB connection successful!"));
