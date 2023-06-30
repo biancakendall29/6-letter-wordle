@@ -3,12 +3,10 @@ import { TileColours } from "./types";
 const todaysWord = "ROUTES";
 
 // const todaysWord = getTodaysWord();
-export const checkForMatch = (guess: string) => {
+export const checkForMatch = (guess: string): [TileColours[], boolean] => {
   const tileColours = new Array(6);
   // handle duplicate letters
   for (let i = 0; i < 6; i++) {
-    console.log(guess[i]);
-
     if (guess[i] === todaysWord[i]) {
       tileColours[i] = TileColours.GREEN;
     } else if (todaysWord.includes(guess[i])) {
@@ -17,7 +15,10 @@ export const checkForMatch = (guess: string) => {
       tileColours[i] = TileColours.CLEAR;
     }
   }
-  //   console.log("check for match", tileColours);
 
-  return tileColours;
+  if (guess === todaysWord) {
+    return [tileColours, true];
+  }
+
+  return [tileColours, false];
 };

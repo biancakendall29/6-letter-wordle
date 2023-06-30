@@ -19,6 +19,8 @@ import { checkForMatch } from "../word-handling/check-for-match";
 import { TileColours } from "../word-handling/types";
 import { Alert } from "../alert";
 import { AlertTypes } from "../alert/types";
+import { LoseMenu } from "../modal/lose-menu";
+import { WinMenu } from "../modal/win-menu";
 
 interface IBoard {
   selectedLetter: string;
@@ -35,6 +37,7 @@ export const Board: FC<IBoard> = ({
   enterClicked,
   setEnterClicked,
 }) => {
+  // ---------- States -----------
   const [inputs, setInputs] = useState(() => {
     const initialArray = [];
     for (let i = 1; i <= 36; i++) {
@@ -73,7 +76,10 @@ export const Board: FC<IBoard> = ({
   ]);
   const [guessNumber, setGuessNumber] = useState(0);
   const [alertNonExistingWord, setAlertNonExistingWord] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
+  const [gameLost, setGameLost] = useState(false);
 
+  // ---------- UseEffects -----------
   useEffect(() => {
     setInputs((prevInputs) =>
       prevInputs.map((entry) =>
@@ -123,17 +129,6 @@ export const Board: FC<IBoard> = ({
     setBackBlocks(updatedBlocks);
   }, [tileColours, blockColours, blocks]);
 
-  const flipTile = (tileColour: TileColours, guessIndex: number) => {
-    const updatedBlocks = blockColours.map((block) => {
-      if (block.id === guessIndex) {
-        block.colour = tileColour;
-      }
-      return block;
-    });
-    setBlockColours(updatedBlocks);
-    return;
-  };
-
   useEffect(() => {
     let j = 0;
     for (let i = 5; i >= 0; i--) {
@@ -141,19 +136,6 @@ export const Board: FC<IBoard> = ({
       j++;
     }
   }, [tileColours, guessNumber]);
-
-  const enterGuess = async (guess: string) => {
-    let correct = await checkWord(guess);
-
-    if (correct) {
-      setTileColours(checkForMatch(guess));
-      setEnableInput(true);
-    } else {
-      setAlertNonExistingWord(true);
-      setEnableInput(false);
-    }
-    setEnterClicked(false);
-  };
 
   useEffect(() => {
     if (alertNonExistingWord) {
@@ -167,6 +149,39 @@ export const Board: FC<IBoard> = ({
     return backBlocks.concat(blocks);
   }, [backBlocks, blocks]);
 
+  // ---------- Functions -----------
+  const flipTile = (tileColour: TileColours, guessIndex: number) => {
+    const updatedBlocks = blockColours.map((block) => {
+      if (block.id === guessIndex) {
+        block.colour = tileColour;
+      }
+      return block;
+    });
+    setBlockColours(updatedBlocks);
+    return;
+  };
+
+  const enterGuess = async (guess: string) => {
+    let correct = await checkWord(guess);
+    if (correct) {
+      const [tiles, winningWord] = checkForMatch(guess);
+      if (winningWord) {
+        setTimeout(() => {
+          setGameWon(true);
+          setEnableInput(false);
+        }, 500);
+      } else if (!winningWord && guessNumber >= 35) {
+        setGameLost(true);
+      }
+      setTileColours(tiles);
+      setEnableInput(true);
+    } else {
+      setAlertNonExistingWord(true);
+      setEnableInput(false);
+    }
+    setEnterClicked(false);
+  };
+
   return (
     <>
       <BoardContainer>
@@ -177,6 +192,8 @@ export const Board: FC<IBoard> = ({
           <BoardGrid>{allBlocks}</BoardGrid>
         </BoardWrapper>
       </BoardContainer>
+      {gameWon && <WinMenu />}
+      {gameLost && <LoseMenu />}
     </>
   );
 };

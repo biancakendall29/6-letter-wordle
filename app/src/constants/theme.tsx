@@ -5,7 +5,6 @@ export interface ThemeSchema {
   textSecondary: string;
   borderPrimary: string;
   borderRadius: string;
-  disabled: string;
   green: string;
 }
 
@@ -16,6 +15,5 @@ export const defaultTheme: ThemeSchema = {
   textSecondary: "#22262b",
   borderPrimary: "#d8e4ee",
   borderRadius: "4px",
-  disabled: "#D3D3D3",
   green: "#AAD2BA",
 };

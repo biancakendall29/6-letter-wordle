@@ -52,7 +52,6 @@ export const Keyboard: FC<IKeyboard> = ({
   };
 
   const handleEnter = async () => {
-    console.log("enter clicked");
     setEnterClicked(true);
     setBackspaceCount(0);
   };
@@ -92,9 +91,9 @@ export const Keyboard: FC<IKeyboard> = ({
           key="square-backspace"
           onClick={handleBackspace}
           disabled={
-            (currentBlock % 6 === 1 && currentBlock !== 1) ||
             currentBlock === 0 ||
-            (currentBlock === 1 && selectedLetter === "")
+            (currentBlock % 6 === 1 && selectedLetter === "") ||
+            (currentBlock % 6 === 0 && selectedLetter !== "")
           }
         >
           <img alt="Backspace" src="/img/backspace_icon.png" width="130%" />

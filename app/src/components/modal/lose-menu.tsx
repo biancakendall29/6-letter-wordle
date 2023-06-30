@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { Modal } from ".";
-import { PlayButton, StartMenuContainer } from "./styled-components";
+import { ShareButton, WinningContainer } from "./styled-components";
 
-export const StartMenu: FC = () => {
+export const LoseMenu: FC = () => {
   const [isMenuShown, setIsMenuShown] = useState(true);
 
   const handleCloseMenu = () => {
@@ -10,13 +10,16 @@ export const StartMenu: FC = () => {
   };
 
   const menuModalContent = (
-    <StartMenuContainer>
-      <h1>Start Menu</h1>
-      <h2>Click play to begin</h2>
+    <WinningContainer>
+      <h1>Sorry, you did not get today's word ☹️</h1>
+      <h2>insert todays word</h2>
+      <h2>insert day # : X / 6</h2>
       <div>
-        <PlayButton onClick={() => setIsMenuShown(false)}>PLAY</PlayButton>
+        <ShareButton onClick={() => console.log("todo share")}>
+          SHARE
+        </ShareButton>
       </div>
-    </StartMenuContainer>
+    </WinningContainer>
   );
 
   return (
@@ -25,7 +28,6 @@ export const StartMenu: FC = () => {
         isShown={isMenuShown}
         hide={handleCloseMenu}
         modalContent={menuModalContent}
-        headerText="Start Menu"
       />
     </>
   );

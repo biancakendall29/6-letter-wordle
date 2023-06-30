@@ -1,17 +1,18 @@
 import { styled } from "styled-components";
+import { defaultTheme } from "../../constants/theme";
 
 export const Wrapper = styled.div`
   position: fixed;
-  top: 30%;
-  left: 35%;
-  height: 40%;
-  width: 30%;
+  top: 10%;
+  left: 8%;
+  height: 50%;
+  width: 80%;
   padding: 2%;
-  background-color: #1f232b;
+  background-color: ${defaultTheme.backgroundSecondary};
   z-index: 700;
   display: flex;
   flex-direction: column;
-  border-radius: 4px;
+  border-radius: ${defaultTheme.borderRadius};
 `;
 
 export const Header = styled.div`
@@ -20,13 +21,13 @@ export const Header = styled.div`
 `;
 
 export const HeaderText = styled.div`
-  color: white;
-  font-size: 1.75rem;
+  color: ${defaultTheme.textSecondary};
+  font-size: 1rem;
   margin-bottom: 1%;
 `;
 
 export const CloseIcon = styled.button`
-  color: white;
+  color: ${defaultTheme.textSecondary};
   background-color: transparent;
   font-size: 1.2rem;
   border: none;
@@ -40,31 +41,32 @@ export const CloseIcon = styled.button`
 export const Content = styled.div`
   width: auto;
   height: 100%;
-  background-color: #5d5568;
+  background-color: ${defaultTheme.backgroundPrimary};
   padding: 2%;
   border-radius: 4px;
+  font-size: 0.8rem;
 `;
 
-// --------- StartMenu ----------
+// --------- Winning Menu ----------
 
-export const StartMenuContainer = styled.div`
+export const WinningContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  color: #1f232b;
+  color: ${defaultTheme.textPrimary};
 `;
 
-export const PlayButton = styled.button`
+export const ShareButton = styled.button`
   font-size: 2rem;
   font-weight: 800;
-  background-color: #aebdea;
-  color: #1f232b;
+  background-color: ${defaultTheme.backgroundPrimary};
+  color: ${defaultTheme.textPrimary};
   width: 60%;
   padding: 1rem;
   margin-top: 1rem;
-  border: 4px solid #1f232b;
-  border-radius: 4px;
+  border: 4px solid ${defaultTheme.borderPrimary};
+  border-radius: ${defaultTheme.borderRadius};
 
   &:hover {
     cursor: pointer;
