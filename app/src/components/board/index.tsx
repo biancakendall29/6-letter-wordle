@@ -46,14 +46,14 @@ export const Board: FC<IBoard> = ({
   });
   const [blocks, setBlocks] = useState<JSX.Element[]>(() =>
     guesses.map((entry) => (
-      <BlankSquare id={`${entry.id}`} key={entry.id}>
+      <BlankSquare id={`${entry.id}`} key={`front-${entry.id}`}>
         {entry.value}
       </BlankSquare>
     ))
   );
   const [backBlocks, setBackBlocks] = useState<JSX.Element[]>(() =>
     guesses.map((entry) => (
-      <BlankSquare id={`${entry.id}`} key={entry.id}>
+      <BlankSquare id={`${entry.id}`} key={`back-${entry.id}`}>
         {entry.value}
       </BlankSquare>
     ))
@@ -88,7 +88,7 @@ export const Board: FC<IBoard> = ({
     const updatedBlocks = guesses.map((entry) => (
       <BlankSquare
         id={`${entry.id}`}
-        key={entry.id}
+        key={`front-${entry.id}`}
         background={entry.colour}
         row={Math.ceil(entry.id / 6)}
         column={entry.id % 6 === 0 ? 6 : entry.id % 6}
@@ -103,7 +103,7 @@ export const Board: FC<IBoard> = ({
     const updatedBlocks = blockColours.map((entry, i) => (
       <BackBlankSquare
         id={`${entry.id}`}
-        key={entry.id + 36}
+        key={`back-${entry.id}`}
         background={entry.colour}
         row={Math.ceil(entry.id / 6)}
         column={entry.id % 6 === 0 ? 6 : entry.id % 6}

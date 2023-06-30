@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import {
   BackspaceSquare,
   KeyboardRow1,
@@ -9,6 +9,7 @@ import {
 
 interface IKeyboard {
   setSelectedLetter: Dispatch<SetStateAction<string>>;
+  selectedLetter: string;
   setCurrentBlock: Dispatch<SetStateAction<number>>;
   currentBlock: number;
   enableInput: boolean;
@@ -16,30 +17,31 @@ interface IKeyboard {
 
 export const Keyboard: FC<IKeyboard> = ({
   setSelectedLetter,
+  selectedLetter,
   setCurrentBlock,
   currentBlock,
   enableInput,
 }) => {
   const keyboardKeys = require("../../payloads/keyboard-keys.json");
+  const [backspaceCount, setBackspaceCount] = useState(0);
 
   const handleClick = async (e: any) => {
+    if (backspaceCount < 1) {
+      setCurrentBlock(currentBlock + 1);
+    }
+    setBackspaceCount(0);
     setSelectedLetter(e.target.value);
-    setCurrentBlock(currentBlock + 1);
   };
+
+  useEffect(() => {
+    if (backspaceCount > 1) {
+      setCurrentBlock(currentBlock - 1);
+    }
+  }, [backspaceCount]);
 
   const handleBackspace = async () => {
-    await handleBackspaceLetter();
-    await handleBackspaceBlock();
-  };
-
-  const handleBackspaceLetter = async () => {
     setSelectedLetter("");
-    return;
-  };
-
-  const handleBackspaceBlock = async () => {
-    setCurrentBlock(currentBlock - 1);
-    return;
+    setBackspaceCount(backspaceCount + 1);
   };
 
   const generateKey = (values: string[]) => {

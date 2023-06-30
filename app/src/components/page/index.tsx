@@ -17,6 +17,7 @@ export const Page: FC = () => {
         />
         <Keyboard
           setSelectedLetter={setSelectedLetter}
+          selectedLetter={selectedLetter}
           setCurrentBlock={setCurrentBlock}
           currentBlock={currentBlock}
           enableInput={enableInput}
