@@ -7,8 +7,8 @@ export const AlertContainer = styled.div<{
   margin?: string;
   padding?: string;
 }>`
-  background: ${({ type }) => type};
-  border-left: ${({ type }) => `4px solid ${type}`};
+  background: #2b303a;
+  border: ${({ type }) => `4px solid ${type}`};
   display: flex;
   width: ${({ width }) => width ?? "50%"};
   padding: ${({ padding }) => padding ?? "20px 10px"};
@@ -17,21 +17,13 @@ export const AlertContainer = styled.div<{
 
 export const TextContainer = styled.div`
   padding-left: 10px;
-
   & > *:last-child {
     margin-bottom: 0;
   }
 `;
 
-export const AlertHeading = styled.h2`
-  color: white;
-  width: fit-content;
-  line-height: 24px;
-  margin-bottom: 10px;
-`;
-
 export const Paragraph = styled.p`
-  color: white;
+  color: #b8b8b8;
   line-height: 1.5;
 `;
 

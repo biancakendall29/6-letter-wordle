@@ -2,3 +2,4 @@
 /server/node_modules
 /server/src/utils/word-list.json
 .env
+config.env
