@@ -13,74 +13,47 @@ export const KeyboardContainer = styled.div`
 
 export const KeyboardRow1 = styled.div`
   display: grid;
+  grid-gap: 0.2rem;
+  text-align: center;
+  width: fit-content;
+  height: fit-content;
+  background-color: ${defaultTheme.backgroundPrimary};
   grid-template-columns: repeat(10, 2rem);
   grid-template-rows: repeat(1, 3rem);
-  grid-gap: 0.2rem;
-  width: fit-content;
-  height: fit-content;
-  background-color: ${defaultTheme.backgroundPrimary};
   margin-top: 40px;
-  text-align: center;
 `;
 
-export const KeyboardRow2 = styled.div`
-  display: grid;
+export const KeyboardRow2 = styled(KeyboardRow1)`
   grid-template-columns: repeat(9, 2rem);
   grid-template-rows: repeat(1, 3rem);
-  grid-gap: 0.2rem;
-  width: fit-content;
-  height: fit-content;
-  background-color: ${defaultTheme.backgroundPrimary};
   margin-top: 20px;
-  align-items: center;
-  justify-content: center;
 `;
 
-export const KeyboardRow3 = styled.div`
-  display: grid;
+export const KeyboardRow3 = styled(KeyboardRow1)`
   grid-template-columns: repeat(9, 2rem);
   grid-template-rows: repeat(1, 3rem);
-  grid-gap: 0.2rem;
-  width: fit-content;
-  height: fit-content;
-  background-color: ${defaultTheme.backgroundPrimary};
   margin-top: 20px;
-  align-items: center;
 `;
 
 export const KeyboardSquare = styled.button`
   background-color: ${defaultTheme.backgroundSecondary};
   color: ${defaultTheme.textSecondary};
-  text-align: center;
+  border-radius: ${defaultTheme.borderRadius};
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.2rem;
   text-transform: uppercase;
-  border-radius: ${defaultTheme.borderRadius};
-  width: 100%;
-  height: 100%;
 `;
 
-export const BackspaceSquare = styled.button`
-  background-color: ${defaultTheme.backgroundSecondary};
-  color: ${defaultTheme.textSecondary};
-  border-radius: ${defaultTheme.borderRadius};
+export const BackspaceSquare = styled(KeyboardSquare)`
   grid-column: 9 / 9;
   grid-row: 1 / 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
-export const EnterSquare = styled.button`
-  background-color: ${defaultTheme.backgroundSecondary};
-  color: ${defaultTheme.textSecondary};
-  border-radius: ${defaultTheme.borderRadius};
+export const EnterSquare = styled(KeyboardSquare)`
   grid-column: 1 / 1;
   grid-row: 1 / 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;

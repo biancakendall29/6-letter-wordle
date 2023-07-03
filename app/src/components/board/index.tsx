@@ -7,8 +7,8 @@ import {
   useState,
 } from "react";
 import {
-  BackBlankSquare,
-  BlankSquare,
+  BackCard,
+  FrontCard,
   BoardContainer,
   BoardGrid,
   BoardWrapper,
@@ -21,6 +21,7 @@ import { Alert } from "../alert";
 import { AlertTypes } from "../alert/types";
 import { LoseMenu } from "../modal/lose-menu";
 import { WinMenu } from "../modal/win-menu";
+import { InitialInputs } from "./constants";
 
 interface IBoard {
   selectedLetter: string;
@@ -38,42 +39,23 @@ export const Board: FC<IBoard> = ({
   setEnterClicked,
 }) => {
   // ---------- States -----------
-  const [inputs, setInputs] = useState(() => {
-    const initialArray = [];
-    for (let i = 1; i <= 36; i++) {
-      initialArray.push({ id: i, value: "", colour: TileColours.CLEAR });
-    }
-    return initialArray;
-  });
-  const [blockColours, setBlockColours] = useState(() => {
-    const initialArray = [];
-    for (let i = 1; i <= 36; i++) {
-      initialArray.push({ id: i, value: "", colour: TileColours.CLEAR });
-    }
-    return initialArray;
-  });
+  const [inputs, setInputs] = useState(InitialInputs());
+  const [blockColours, setBlockColours] = useState(InitialInputs());
   const [blocks, setBlocks] = useState<JSX.Element[]>(() =>
     inputs.map((entry) => (
-      <BlankSquare id={`${entry.id}`} key={`front-${entry.id}`}>
+      <FrontCard id={`${entry.id}`} key={`front-${entry.id}`}>
         {entry.value}
-      </BlankSquare>
+      </FrontCard>
     ))
   );
   const [backBlocks, setBackBlocks] = useState<JSX.Element[]>(() =>
-    inputs.map((entry) => (
-      <BlankSquare id={`${entry.id}`} key={`back-${entry.id}`}>
+    blockColours.map((entry) => (
+      <BackCard id={`${entry.id}`} key={`back-${entry.id}`}>
         {entry.value}
-      </BlankSquare>
+      </BackCard>
     ))
   );
-  const [tileColours, setTileColours] = useState<TileColours[]>([
-    TileColours.CLEAR,
-    TileColours.CLEAR,
-    TileColours.CLEAR,
-    TileColours.CLEAR,
-    TileColours.CLEAR,
-    TileColours.CLEAR,
-  ]);
+  const [tileColours, setTileColours] = useState<TileColours[]>([]);
   const [guessNumber, setGuessNumber] = useState(0);
   const [alertNonExistingWord, setAlertNonExistingWord] = useState(false);
   const [gameWon, setGameWon] = useState(false);
@@ -96,8 +78,8 @@ export const Board: FC<IBoard> = ({
   }, [currentBlock, inputs, enterClicked]);
 
   useEffect(() => {
-    const updatedBlocks = inputs.map((entry) => (
-      <BlankSquare
+    const updatedBlocks = inputs.map((entry, index) => (
+      <FrontCard
         id={`${entry.id}`}
         key={`front-${entry.id}`}
         background={entry.colour}
@@ -105,26 +87,27 @@ export const Board: FC<IBoard> = ({
         column={entry.id % 6 === 0 ? 6 : entry.id % 6}
       >
         {entry.value}
-      </BlankSquare>
+      </FrontCard>
     ));
     setBlocks(updatedBlocks);
   }, [inputs]);
 
   useEffect(() => {
     const updatedBlocks = blockColours.map((entry, i) => (
-      <BackBlankSquare
+      <BackCard
         id={`${entry.id}`}
         key={`back-${entry.id}`}
         background={entry.colour}
         row={Math.ceil(entry.id / 6)}
         column={entry.id % 6 === 0 ? 6 : entry.id % 6}
+        flipped={entry.flipped}
       >
         {
           blocks.find((_, index) => {
             return index === i;
           })?.props.children
         }
-      </BackBlankSquare>
+      </BackCard>
     ));
     setBackBlocks(updatedBlocks);
   }, [tileColours, blockColours, blocks]);
@@ -154,6 +137,7 @@ export const Board: FC<IBoard> = ({
     const updatedBlocks = blockColours.map((block) => {
       if (block.id === guessIndex) {
         block.colour = tileColour;
+        block.flipped = "true";
       }
       return block;
     });
