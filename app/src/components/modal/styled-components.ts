@@ -72,3 +72,8 @@ export const ShareButton = styled.button`
     cursor: pointer;
   }
 `;
+
+export const Score = styled.h1`
+  font-size: 2rem;
+  color: ${defaultTheme.green};
+`;

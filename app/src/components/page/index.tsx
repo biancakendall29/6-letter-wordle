@@ -8,6 +8,14 @@ export const Page: FC = () => {
   const [currentBlock, setCurrentBlock] = useState(0);
   const [enableInput, setEnableInput] = useState(true);
   const [enterClicked, setEnterClicked] = useState(false);
+
+  const initialDate = new Date("2023-07-02");
+  const currentDate = new Date();
+  const timeDiff = currentDate.getTime() - initialDate.getTime();
+
+  // Convert milliseconds to days
+  const daysElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
   return (
     <>
       <PageContainer>
@@ -17,6 +25,7 @@ export const Page: FC = () => {
           setEnableInput={setEnableInput}
           enterClicked={enterClicked}
           setEnterClicked={setEnterClicked}
+          day={daysElapsed}
         />
         <Keyboard
           setSelectedLetter={setSelectedLetter}

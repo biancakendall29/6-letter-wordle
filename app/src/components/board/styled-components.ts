@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 import { TileColours } from "../word-handling/types";
 import { defaultTheme } from "../../constants/theme";
 

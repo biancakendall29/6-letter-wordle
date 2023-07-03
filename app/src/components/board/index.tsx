@@ -29,6 +29,7 @@ interface IBoard {
   setEnableInput: Dispatch<SetStateAction<boolean>>;
   enterClicked: boolean;
   setEnterClicked: Dispatch<SetStateAction<boolean>>;
+  day: number;
 }
 
 export const Board: FC<IBoard> = ({
@@ -37,6 +38,7 @@ export const Board: FC<IBoard> = ({
   setEnableInput,
   enterClicked,
   setEnterClicked,
+  day,
 }) => {
   // ---------- States -----------
   const [inputs, setInputs] = useState(InitialInputs());
@@ -60,6 +62,7 @@ export const Board: FC<IBoard> = ({
   const [alertNonExistingWord, setAlertNonExistingWord] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
+  const [score, setScore] = useState(0);
 
   // ---------- UseEffects -----------
   useEffect(() => {
@@ -151,11 +154,14 @@ export const Board: FC<IBoard> = ({
       const [tiles, winningWord] = checkForMatch(guess);
       if (winningWord) {
         setTimeout(() => {
+          setScore(Math.ceil(guessNumber / 6));
           setGameWon(true);
           setEnableInput(false);
-        }, 500);
-      } else if (!winningWord && guessNumber >= 35) {
-        setGameLost(true);
+        }, 2500);
+      } else if (!winningWord && guessNumber > 35) {
+        setTimeout(() => {
+          setGameLost(true);
+        }, 2500);
       }
       setTileColours(tiles);
       setEnableInput(true);
@@ -176,8 +182,8 @@ export const Board: FC<IBoard> = ({
           <BoardGrid>{allBlocks}</BoardGrid>
         </BoardWrapper>
       </BoardContainer>
-      {gameWon && <WinMenu />}
-      {gameLost && <LoseMenu />}
+      {gameWon && <WinMenu day={day} score={4} todaysWord="" />}
+      {gameLost && <LoseMenu day={day} todaysWord="" />}
     </>
   );
 };

@@ -2,6 +2,8 @@ import { TileColours } from "./types";
 
 const todaysWord = "ROUTES";
 
+// schedular
+
 // const todaysWord = getTodaysWord();
 export const checkForMatch = (guess: string): [TileColours[], boolean] => {
   const tileColours = new Array(6);

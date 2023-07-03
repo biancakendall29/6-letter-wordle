@@ -18,7 +18,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Next Steps
 
+- Persisting user stats to db
 - Implement Redux state management
+- Flipping tiles effect
 - Media queries for different device sizes (mobile-first design at present)
 - Implement light / dark theming
 - Use device's keyboard instead of keyboard component
