@@ -49,7 +49,7 @@ export const Content = styled.div`
 
 // --------- Winning Menu ----------
 
-export const WinningContainer = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,7 +57,7 @@ export const WinningContainer = styled.div`
   color: ${defaultTheme.textPrimary};
 `;
 
-export const ShareButton = styled.button`
+export const Button = styled.button`
   font-size: 2rem;
   font-weight: 800;
   background-color: ${defaultTheme.backgroundPrimary};

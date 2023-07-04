@@ -19,7 +19,7 @@ export const checkWord = async (word: string) => {
     }
     return false;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false;
   }
 };

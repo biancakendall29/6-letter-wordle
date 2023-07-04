@@ -17,6 +17,7 @@ interface IKeyboard {
   enableInput: boolean;
   setEnableInput: Dispatch<SetStateAction<boolean>>;
   setEnterClicked: Dispatch<SetStateAction<boolean>>;
+  incorrectWord: boolean;
 }
 
 export const Keyboard: FC<IKeyboard> = ({
@@ -27,6 +28,7 @@ export const Keyboard: FC<IKeyboard> = ({
   enableInput,
   setEnableInput,
   setEnterClicked,
+  incorrectWord,
 }) => {
   const keyboardKeys = require("../../payloads/keyboard-keys.json");
   const [backspaceCount, setBackspaceCount] = useState(0);
@@ -92,8 +94,10 @@ export const Keyboard: FC<IKeyboard> = ({
           onClick={handleBackspace}
           disabled={
             currentBlock === 0 ||
-            (currentBlock % 6 === 1 && selectedLetter === "") ||
-            (currentBlock % 6 === 0 && selectedLetter !== "")
+            (currentBlock % 6 === 1 &&
+              selectedLetter === "" &&
+              !incorrectWord) ||
+            (currentBlock % 6 === 0 && selectedLetter !== "" && !incorrectWord)
           }
         >
           <img alt="Backspace" src="/img/backspace_icon.png" width="130%" />

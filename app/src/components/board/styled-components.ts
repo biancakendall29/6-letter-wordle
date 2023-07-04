@@ -35,7 +35,7 @@ export const FrontCard = styled.div<{
   column?: number;
   flipped?: string;
 }>`
-  background-color: ${({ background }) => background || "transparent"};
+  background-color: ${defaultTheme.backgroundPrimary};
   color: ${defaultTheme.textPrimary};
   border: 2px solid ${defaultTheme.backgroundSecondary};
   border-radius: ${defaultTheme.borderRadius};
@@ -48,7 +48,6 @@ export const FrontCard = styled.div<{
   display: flex;
   justify-content: center;
   align-items: center;
-  // position: absolute;
   width: 100%;
   height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
@@ -71,6 +70,7 @@ export const BackCard = styled(FrontCard)<{
   column?: number;
   flipped?: string;
 }>`
+  background-color: ${({ background }) => background || "transparent"};
   z-index: 1;
   transform: rotateY(180deg);
 

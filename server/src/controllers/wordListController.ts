@@ -1,31 +1,21 @@
 import { Request, Response } from "express";
+import client from "../utils/caching";
 const Word = require("../models/wordModel");
-
-const chooseWord = async (wordList: any[]) => {
-  let arrIndex = Math.floor(Math.random() * (wordList.length - 0) + 0);
-  const chosenWord = wordList[arrIndex];
-  const word = await Word.findByIdAndUpdate(
-    chosenWord.id,
-    { used: true },
-    {
-      new: true,
-    }
-  );
-
-  if (!word) {
-    return new Error("No word found with that ID");
-  }
-  return word;
-};
+const schedule = require("node-schedule");
 
 module.exports.getRandomWord = async (req: Request, res: Response) => {
-  const words = await Word.find({ used: false });
-  const chosenWord = await chooseWord(words);
+  try {
+    const word = await client.get("word-today");
+    console.log(word);
 
-  res.status(200).json({
-    status: "success",
-    data: { word: chosenWord.name },
-  });
+    res.status(200).json({
+      status: "success",
+      data: { word: word },
+    });
+  } catch (error) {
+    console.error("Error retrieving random word:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 module.exports.getWordList = async (req: Request, res: Response) => {

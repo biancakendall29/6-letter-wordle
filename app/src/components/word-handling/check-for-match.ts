@@ -1,12 +1,12 @@
 import { TileColours } from "./types";
 
-const todaysWord = "ROUTES";
-
-// schedular
-
-// const todaysWord = getTodaysWord();
-export const checkForMatch = (guess: string): [TileColours[], boolean] => {
+export const checkForMatch = (
+  guess: string,
+  todaysWord: string
+): [TileColours[], boolean] => {
   const tileColours = new Array(6);
+  console.log(todaysWord);
+
   // handle duplicate letters
   for (let i = 0; i < 6; i++) {
     if (guess[i] === todaysWord[i]) {

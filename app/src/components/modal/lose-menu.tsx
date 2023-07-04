@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Modal } from ".";
-import { Score, ShareButton, WinningContainer } from "./styled-components";
+import { Score, Button, Container } from "./styled-components";
 
 interface ILoseMenu {
   day: number;
@@ -15,16 +15,15 @@ export const LoseMenu: FC<ILoseMenu> = ({ day, todaysWord }) => {
   };
 
   const menuModalContent = (
-    <WinningContainer>
+    <Container>
       <h1>Sorry, you did not get today's word ☹️</h1>
+      <h2>{todaysWord}</h2>
       <h2>{`Day ${day}`}</h2>
       <Score>{`X / 6`}</Score>
       <div>
-        <ShareButton onClick={() => console.log("todo share")}>
-          SHARE
-        </ShareButton>
+        <Button onClick={() => console.log("todo share")}>SHARE</Button>
       </div>
-    </WinningContainer>
+    </Container>
   );
 
   return (

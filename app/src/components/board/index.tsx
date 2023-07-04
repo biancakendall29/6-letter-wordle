@@ -22,6 +22,7 @@ import { AlertTypes } from "../alert/types";
 import { LoseMenu } from "../modal/lose-menu";
 import { WinMenu } from "../modal/win-menu";
 import { InitialInputs } from "./constants";
+import axios from "axios";
 
 interface IBoard {
   selectedLetter: string;
@@ -30,6 +31,8 @@ interface IBoard {
   enterClicked: boolean;
   setEnterClicked: Dispatch<SetStateAction<boolean>>;
   day: number;
+  incorrectWord: boolean;
+  setIncorrectWord: Dispatch<SetStateAction<boolean>>;
 }
 
 export const Board: FC<IBoard> = ({
@@ -39,6 +42,8 @@ export const Board: FC<IBoard> = ({
   enterClicked,
   setEnterClicked,
   day,
+  incorrectWord,
+  setIncorrectWord,
 }) => {
   // ---------- States -----------
   const [inputs, setInputs] = useState(InitialInputs());
@@ -63,6 +68,7 @@ export const Board: FC<IBoard> = ({
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
   const [score, setScore] = useState(0);
+  const [randomWord, setRandomWord] = useState("");
 
   // ---------- UseEffects -----------
   useEffect(() => {
@@ -95,6 +101,8 @@ export const Board: FC<IBoard> = ({
     setBlocks(updatedBlocks);
   }, [inputs]);
 
+  console.log(incorrectWord);
+
   useEffect(() => {
     const updatedBlocks = blockColours.map((entry, i) => (
       <BackCard
@@ -113,23 +121,26 @@ export const Board: FC<IBoard> = ({
       </BackCard>
     ));
     setBackBlocks(updatedBlocks);
-  }, [tileColours, blockColours, blocks]);
+  }, [tileColours, blockColours, blocks, incorrectWord]);
 
   useEffect(() => {
-    let j = 0;
-    for (let i = 5; i >= 0; i--) {
-      flipTile(tileColours[j], guessNumber - i);
-      j++;
+    if (!incorrectWord) {
+      let j = 0;
+      for (let i = 5; i >= 0; i--) {
+        flipTile(tileColours[j], guessNumber - i);
+        j++;
+      }
     }
-  }, [tileColours, guessNumber]);
+  }, [tileColours, guessNumber, incorrectWord]);
 
   useEffect(() => {
-    if (alertNonExistingWord) {
+    if (incorrectWord) {
+      setAlertNonExistingWord(true);
       setTimeout(() => {
         setAlertNonExistingWord(false);
-      }, 3000);
+      }, 4000);
     }
-  }, [alertNonExistingWord]);
+  }, [incorrectWord]);
 
   const allBlocks = useMemo(() => {
     return backBlocks.concat(blocks);
@@ -137,21 +148,27 @@ export const Board: FC<IBoard> = ({
 
   // ---------- Functions -----------
   const flipTile = (tileColour: TileColours, guessIndex: number) => {
-    const updatedBlocks = blockColours.map((block) => {
-      if (block.id === guessIndex) {
-        block.colour = tileColour;
-        block.flipped = "true";
-      }
-      return block;
-    });
-    setBlockColours(updatedBlocks);
-    return;
+    if (!incorrectWord) {
+      console.log("set block colours");
+
+      const updatedBlocks = blockColours.map((block) => {
+        if (block.id === guessIndex) {
+          block.colour = tileColour;
+          block.flipped = "true";
+        }
+        return block;
+      });
+      setBlockColours(updatedBlocks);
+    }
   };
 
   const enterGuess = async (guess: string) => {
     let correct = await checkWord(guess);
+    console.log("before", backBlocks);
+
     if (correct) {
-      const [tiles, winningWord] = checkForMatch(guess);
+      setIncorrectWord(false);
+      const [tiles, winningWord] = checkForMatch(guess, randomWord);
       if (winningWord) {
         setTimeout(() => {
           setScore(Math.ceil(guessNumber / 6));
@@ -166,11 +183,31 @@ export const Board: FC<IBoard> = ({
       setTileColours(tiles);
       setEnableInput(true);
     } else {
-      setAlertNonExistingWord(true);
-      setEnableInput(false);
+      setIncorrectWord(true);
     }
     setEnterClicked(false);
+    console.log("after", backBlocks);
   };
+
+  useEffect(() => {
+    const fetchRandomWord = async () => {
+      try {
+        let word = "";
+        const baseUrl = process.env.REACT_APP_SERVER_URL;
+        try {
+          const res = await axios.get(`${baseUrl}word-of-the-day`);
+          word = res.data.data.word;
+        } catch (error) {
+          console.error(error);
+        }
+        setRandomWord(word);
+      } catch (error) {
+        console.error("Error fetching random word:", error);
+      }
+    };
+
+    fetchRandomWord();
+  }, []);
 
   return (
     <>
