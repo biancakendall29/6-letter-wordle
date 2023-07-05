@@ -87,13 +87,14 @@ export const Board: FC<IBoard> = ({
   }, [currentBlock, inputs, enterClicked]);
 
   useEffect(() => {
-    const updatedBlocks = inputs.map((entry, index) => (
+    const updatedBlocks = inputs.map((entry) => (
       <FrontCard
         id={`${entry.id}`}
         key={`front-${entry.id}`}
         background={entry.colour}
         row={Math.ceil(entry.id / 6)}
         column={entry.id % 6 === 0 ? 6 : entry.id % 6}
+        flipped={entry.flipped}
       >
         {entry.value}
       </FrontCard>
@@ -143,6 +144,8 @@ export const Board: FC<IBoard> = ({
   }, [incorrectWord]);
 
   const allBlocks = useMemo(() => {
+    console.log(backBlocks, blocks);
+
     return backBlocks.concat(blocks);
   }, [backBlocks, blocks]);
 
@@ -159,6 +162,12 @@ export const Board: FC<IBoard> = ({
         return block;
       });
       setBlockColours(updatedBlocks);
+
+      setInputs((prevInputs) =>
+        prevInputs.map((entry) =>
+          entry.id === guessIndex ? { ...entry, flipped: "true" } : entry
+        )
+      );
     }
   };
 
@@ -195,8 +204,9 @@ export const Board: FC<IBoard> = ({
         let word = "";
         const baseUrl = process.env.REACT_APP_SERVER_URL;
         try {
-          const res = await axios.get(`${baseUrl}word-of-the-day`);
-          word = res.data.data.word;
+          const res = await axios.get(`${baseUrl}word-today/`);
+          console.log(res.data.data.word.name);
+          word = res.data.data.word.name;
         } catch (error) {
           console.error(error);
         }

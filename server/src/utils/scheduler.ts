@@ -1,8 +1,11 @@
-import cron from "node-cron";
-import client from "./caching";
 const Word = require("../models/wordModel");
+const TodaysWord = require("../models/todaysWordModel");
+const moment = require("moment-timezone");
 
 export const runCronJob = async () => {
+  let i = 0;
+  console.log("CRON RUN ", i);
+
   try {
     const allWords = await Word.find({ used: "false" });
 
@@ -20,12 +23,21 @@ export const runCronJob = async () => {
       return new Error("No word found with that ID");
     }
 
-    const key: string = "word-today";
-    await client.set(key, randomWord.name);
+    const todaysWord = await TodaysWord.findByIdAndUpdate(
+      "64a43ddf48781095b4e612f5",
+      { name: randomWord.name },
+      {
+        new: true,
+      }
+    );
+
+    console.log(todaysWord);
+
+    if (!todaysWord) {
+      return new Error("Todays word not found");
+    }
   } catch (error) {
     console.error("Error selecting random word:", error);
   }
+  i++;
 };
-
-// Schedule the job to run at midnight every day
-cron.schedule("23 14 * * *", runCronJob);
