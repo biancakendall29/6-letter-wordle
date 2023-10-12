@@ -37,6 +37,7 @@ export const Page: FC = () => {
           enableInput={enableInput}
           setEnterClicked={setEnterClicked}
           incorrectWord={incorrectWord}
+          setIncorrectWord={setIncorrectWord}
         />
       </PageContainer>
     </>

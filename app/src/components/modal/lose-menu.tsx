@@ -17,7 +17,7 @@ export const LoseMenu: FC<ILoseMenu> = ({ day, todaysWord }) => {
   const menuModalContent = (
     <Container>
       <h1>Sorry, you did not get today's word ☹️</h1>
-      <h2>{todaysWord}</h2>
+      <h1>{todaysWord}</h1>
       <h2>{`Day ${day}`}</h2>
       <Score>{`X / 6`}</Score>
       <div>

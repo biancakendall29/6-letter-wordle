@@ -1,13 +1,5 @@
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  BackCard,
   FrontCard,
   BoardContainer,
   BoardGrid,
@@ -23,6 +15,7 @@ import { LoseMenu } from "../modal/lose-menu";
 import { WinMenu } from "../modal/win-menu";
 import { InitialInputs } from "./constants";
 import axios from "axios";
+import { TileInput } from "./types";
 
 interface IBoard {
   selectedLetter: string;
@@ -46,8 +39,10 @@ export const Board: FC<IBoard> = ({
   setIncorrectWord,
 }) => {
   // ---------- States -----------
-  const [inputs, setInputs] = useState(InitialInputs());
-  const [blockColours, setBlockColours] = useState(InitialInputs());
+  const [inputs, setInputs] = useState<TileInput[]>(InitialInputs());
+  const [blockColours, setBlockColours] = useState<TileColours[]>(
+    new Array(36).fill(TileColours.CLEAR)
+  );
   const [blocks, setBlocks] = useState<JSX.Element[]>(() =>
     inputs.map((entry) => (
       <FrontCard id={`${entry.id}`} key={`front-${entry.id}`}>
@@ -55,20 +50,12 @@ export const Board: FC<IBoard> = ({
       </FrontCard>
     ))
   );
-  const [backBlocks, setBackBlocks] = useState<JSX.Element[]>(() =>
-    blockColours.map((entry) => (
-      <BackCard id={`${entry.id}`} key={`back-${entry.id}`}>
-        {entry.value}
-      </BackCard>
-    ))
-  );
-  const [tileColours, setTileColours] = useState<TileColours[]>([]);
   const [guessNumber, setGuessNumber] = useState(0);
   const [alertNonExistingWord, setAlertNonExistingWord] = useState(false);
+  const [score, setScore] = useState(0);
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
-  const [score, setScore] = useState(0);
-  const [randomWord, setRandomWord] = useState("");
+  const [randomWord, setRandomWord] = useState("ROUGED");
 
   // ---------- UseEffects -----------
   useEffect(() => {
@@ -81,58 +68,28 @@ export const Board: FC<IBoard> = ({
 
   useEffect(() => {
     if (enterClicked) {
-      setGuessNumber(currentBlock);
       enterGuess(concatenateLetters(currentBlock - 6, currentBlock, inputs));
     }
   }, [currentBlock, inputs, enterClicked]);
 
   useEffect(() => {
-    const updatedBlocks = inputs.map((entry) => (
-      <FrontCard
-        id={`${entry.id}`}
-        key={`front-${entry.id}`}
-        background={entry.colour}
-        row={Math.ceil(entry.id / 6)}
-        column={entry.id % 6 === 0 ? 6 : entry.id % 6}
-        flipped={entry.flipped}
-      >
-        {entry.value}
-      </FrontCard>
-    ));
+    const updatedBlocks = inputs.map((entry) => {
+      const match = blockColours[entry.id - 1];
+
+      return (
+        <FrontCard
+          id={`${entry.id}`}
+          key={`front-${entry.id}-${match}`}
+          background={match && match}
+          row={Math.ceil(entry.id / 6)}
+          column={entry.id % 6 === 0 ? 6 : entry.id % 6}
+        >
+          {entry.value}
+        </FrontCard>
+      );
+    });
     setBlocks(updatedBlocks);
-  }, [inputs]);
-
-  console.log(incorrectWord);
-
-  useEffect(() => {
-    const updatedBlocks = blockColours.map((entry, i) => (
-      <BackCard
-        id={`${entry.id}`}
-        key={`back-${entry.id}`}
-        background={entry.colour}
-        row={Math.ceil(entry.id / 6)}
-        column={entry.id % 6 === 0 ? 6 : entry.id % 6}
-        flipped={entry.flipped}
-      >
-        {
-          blocks.find((_, index) => {
-            return index === i;
-          })?.props.children
-        }
-      </BackCard>
-    ));
-    setBackBlocks(updatedBlocks);
-  }, [tileColours, blockColours, blocks, incorrectWord]);
-
-  useEffect(() => {
-    if (!incorrectWord) {
-      let j = 0;
-      for (let i = 5; i >= 0; i--) {
-        flipTile(tileColours[j], guessNumber - i);
-        j++;
-      }
-    }
-  }, [tileColours, guessNumber, incorrectWord]);
+  }, [inputs, blockColours]);
 
   useEffect(() => {
     if (incorrectWord) {
@@ -143,81 +100,56 @@ export const Board: FC<IBoard> = ({
     }
   }, [incorrectWord]);
 
-  const allBlocks = useMemo(() => {
-    console.log(backBlocks, blocks);
-
-    return backBlocks.concat(blocks);
-  }, [backBlocks, blocks]);
-
-  // ---------- Functions -----------
-  const flipTile = (tileColour: TileColours, guessIndex: number) => {
-    if (!incorrectWord) {
-      console.log("set block colours");
-
-      const updatedBlocks = blockColours.map((block) => {
-        if (block.id === guessIndex) {
-          block.colour = tileColour;
-          block.flipped = "true";
-        }
-        return block;
-      });
-      setBlockColours(updatedBlocks);
-
-      setInputs((prevInputs) =>
-        prevInputs.map((entry) =>
-          entry.id === guessIndex ? { ...entry, flipped: "true" } : entry
-        )
-      );
-    }
-  };
-
   const enterGuess = async (guess: string) => {
     let correct = await checkWord(guess);
-    console.log("before", backBlocks);
-
     if (correct) {
       setIncorrectWord(false);
-      const [tiles, winningWord] = checkForMatch(guess, randomWord);
+      setGuessNumber(guessNumber + 1);
+      const winningWord = checkForMatch(
+        randomWord,
+        inputs,
+        blockColours,
+        setBlockColours,
+        guessNumber
+      );
       if (winningWord) {
+        setScore(guessNumber + 1);
         setTimeout(() => {
-          setScore(Math.ceil(guessNumber / 6));
           setGameWon(true);
           setEnableInput(false);
-        }, 2500);
-      } else if (!winningWord && guessNumber > 35) {
+        }, 1000);
+      } else if (!winningWord && guessNumber >= 6) {
         setTimeout(() => {
           setGameLost(true);
-        }, 2500);
+        }, 1000);
       }
-      setTileColours(tiles);
       setEnableInput(true);
     } else {
       setIncorrectWord(true);
     }
     setEnterClicked(false);
-    console.log("after", backBlocks);
   };
 
-  useEffect(() => {
-    const fetchRandomWord = async () => {
-      try {
-        let word = "";
-        const baseUrl = process.env.REACT_APP_SERVER_URL;
-        try {
-          const res = await axios.get(`${baseUrl}word-today/`);
-          console.log(res.data.data.word.name);
-          word = res.data.data.word.name;
-        } catch (error) {
-          console.error(error);
-        }
-        setRandomWord(word);
-      } catch (error) {
-        console.error("Error fetching random word:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchRandomWord = async () => {
+  //     try {
+  //       let word = "";
+  //       const baseUrl = process.env.REACT_APP_SERVER_URL;
+  //       try {
+  //         const res = await axios.get(`${baseUrl}word-today/`);
+  //         console.log(res.data.data.word.name);
+  //         word = res.data.data.word.name;
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //       setRandomWord(word);
+  //     } catch (error) {
+  //       console.error("Error fetching random word:", error);
+  //     }
+  //   };
 
-    fetchRandomWord();
-  }, []);
+  //   fetchRandomWord();
+  // }, []);
 
   return (
     <>
@@ -226,11 +158,11 @@ export const Board: FC<IBoard> = ({
           <Alert message="Not in word list !" type={AlertTypes.warning} />
         )}
         <BoardWrapper>
-          <BoardGrid>{allBlocks}</BoardGrid>
+          <BoardGrid>{blocks}</BoardGrid>
         </BoardWrapper>
       </BoardContainer>
-      {gameWon && <WinMenu day={day} score={4} todaysWord="" />}
-      {gameLost && <LoseMenu day={day} todaysWord="" />}
+      {gameWon && <WinMenu day={day} score={score} todaysWord={randomWord} />}
+      {gameLost && <LoseMenu day={day} todaysWord={randomWord} />}
     </>
   );
 };

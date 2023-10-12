@@ -18,7 +18,7 @@ export const WinMenu: FC<IWinMenu> = ({ day, score, todaysWord }) => {
   const menuModalContent = (
     <Container>
       <h1>Congratulations 🎉 You got today's word 😁</h1>
-      <h2>{todaysWord}</h2>
+      <h1>{todaysWord}</h1>
       <h2>{`Day ${day}`}</h2>
       <Score>{`${score} / 6`}</Score>
 

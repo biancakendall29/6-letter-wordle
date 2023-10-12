@@ -7,7 +7,6 @@ export const InitialInputs = () => {
       id: i,
       value: "",
       colour: TileColours.CLEAR,
-      flipped: "false",
     });
   }
   return initialArray;

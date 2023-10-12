@@ -35,7 +35,7 @@ export const FrontCard = styled.div<{
   column?: number;
   flipped?: string;
 }>`
-  background-color: ${defaultTheme.backgroundPrimary};
+  background-color: ${(props) => props.background};
   color: ${defaultTheme.textPrimary};
   border: 2px solid ${defaultTheme.backgroundSecondary};
   border-radius: ${defaultTheme.borderRadius};
@@ -61,23 +61,6 @@ export const FrontCard = styled.div<{
     flipped === "true" &&
     css`
       transform: rotateY(180deg);
-    `}
-`;
-
-export const BackCard = styled(FrontCard)<{
-  background?: TileColours;
-  row?: number;
-  column?: number;
-  flipped?: string;
-}>`
-  background-color: ${({ background }) => background || "transparent"};
-  z-index: 1;
-  transform: rotateY(180deg);
-
-  ${({ flipped }) =>
-    flipped === "true" &&
-    css`
-      transform: rotateY(0deg);
     `}
 `;
 

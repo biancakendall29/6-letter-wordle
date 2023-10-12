@@ -18,6 +18,7 @@ interface IKeyboard {
   setEnableInput: Dispatch<SetStateAction<boolean>>;
   setEnterClicked: Dispatch<SetStateAction<boolean>>;
   incorrectWord: boolean;
+  setIncorrectWord: Dispatch<SetStateAction<boolean>>;
 }
 
 export const Keyboard: FC<IKeyboard> = ({
@@ -29,15 +30,18 @@ export const Keyboard: FC<IKeyboard> = ({
   setEnableInput,
   setEnterClicked,
   incorrectWord,
+  setIncorrectWord,
 }) => {
   const keyboardKeys = require("../../payloads/keyboard-keys.json");
   const [backspaceCount, setBackspaceCount] = useState(0);
+  const [isStartOfGuess, setIsStartOfGuess] = useState(true);
 
   const handleClick = async (e: any) => {
     if (backspaceCount < 1) {
       setCurrentBlock(currentBlock + 1);
     }
     setBackspaceCount(0);
+    setIsStartOfGuess(false);
     setSelectedLetter(e.target.value);
   };
 
@@ -51,16 +55,27 @@ export const Keyboard: FC<IKeyboard> = ({
     setSelectedLetter("");
     setBackspaceCount(backspaceCount + 1);
     setEnableInput(true);
+    setIncorrectWord(false);
   };
 
   const handleEnter = async () => {
     setEnterClicked(true);
+    setIsStartOfGuess(true);
     setBackspaceCount(0);
   };
 
   useEffect(() => {
+    if (incorrectWord) {
+      setIsStartOfGuess(false);
+    }
+  }, [incorrectWord]);
+
+  useEffect(() => {
     if (currentBlock % 6 === 0 && currentBlock !== 0 && backspaceCount < 1) {
       setEnableInput(false);
+    }
+    if (currentBlock < 1 || (currentBlock <= 1 && backspaceCount > 1)) {
+      setIsStartOfGuess(true);
     }
   }, [backspaceCount, currentBlock, setEnableInput]);
 
@@ -93,11 +108,10 @@ export const Keyboard: FC<IKeyboard> = ({
           key="square-backspace"
           onClick={handleBackspace}
           disabled={
-            currentBlock === 0 ||
             (currentBlock % 6 === 1 &&
               selectedLetter === "" &&
               !incorrectWord) ||
-            (currentBlock % 6 === 0 && selectedLetter !== "" && !incorrectWord)
+            isStartOfGuess
           }
         >
           <img alt="Backspace" src="/img/backspace_icon.png" width="130%" />
@@ -109,7 +123,7 @@ export const Keyboard: FC<IKeyboard> = ({
           value={"Enter"}
           key="square-enter"
           onClick={handleEnter}
-          disabled={currentBlock % 6 !== 0 || currentBlock === 0}
+          disabled={currentBlock % 6 !== 0 || isStartOfGuess}
         >
           <img alt="Backspace" src="/img/enter_icon.png" width="130%" />
         </EnterSquare>
