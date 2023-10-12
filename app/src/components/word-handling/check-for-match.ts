@@ -1,40 +1,67 @@
 import { Dispatch, SetStateAction } from "react";
-import { TileInput } from "../board/types";
-import { TileColours } from "./types";
-import { concatenateLetters } from "./concat-letters";
+import { TileColours, colourCheck } from "./types";
 
 export const checkForMatch = (
   todaysWord: string,
-  inputs: TileInput[],
+  guess: string,
+  guessNumber: number,
   blockColours: TileColours[],
-  setBlockColours: Dispatch<SetStateAction<TileColours[]>>,
-  guessNumber: number
+  setBlockColours: Dispatch<SetStateAction<TileColours[]>>
 ): boolean => {
-  const newBlockColours = blockColours.map((colour, index) => {
-    if (index >= guessNumber * 6 && index < (guessNumber + 1) * 6) {
-      const i = index % 6;
-      const currInput = inputs.find(
-        (inp) => inp.id === guessNumber * 6 + i + 1
-      );
-      if (currInput) {
-        return currInput?.value === todaysWord[i]
-          ? TileColours.GREEN
-          : todaysWord.includes(currInput?.value)
-          ? TileColours.ORANGE
-          : TileColours.CLEAR;
-      }
-    }
-    return colour;
-  });
+  const guessArray = guess
+    .split("")
+    .map((char) => ({ char: char, used: false }));
+  const wordArray = todaysWord.split("").map((char) => ({ char, used: false }));
 
-  setBlockColours(newBlockColours);
+  const newColours = getTileColours(guessArray, wordArray);
 
-  if (
-    concatenateLetters(guessNumber * 6, guessNumber * 6 + 6, inputs) ===
-    todaysWord
-  ) {
+  const updatedBlockColours = [
+    ...blockColours.slice(0, guessNumber * 6),
+    ...newColours,
+    ...blockColours.slice((guessNumber + 1) * 6),
+  ];
+
+  setBlockColours(updatedBlockColours);
+
+  if (guess === todaysWord) {
     return true;
   }
 
   return false;
+};
+
+const getTileColours = (
+  guessArray: colourCheck[],
+  wordArray: colourCheck[]
+) => {
+  const result: TileColours[] = [];
+
+  // Check for green matches
+  guessArray.forEach((g, i) => {
+    if (g.char === wordArray[i].char) {
+      result.push(TileColours.GREEN);
+      g.used = true;
+      wordArray[i].used = true;
+    } else {
+      result.push(TileColours.CLEAR);
+    }
+  });
+
+  // Check for orange matches
+  guessArray.forEach((g, i) => {
+    if (result[i] !== TileColours.CLEAR) {
+      return;
+    }
+
+    for (let j = 0; j < wordArray.length; j++) {
+      if (g.char === wordArray[j].char && !wordArray[j].used) {
+        result[i] = TileColours.ORANGE;
+        g.used = true;
+        wordArray[j].used = true;
+        break;
+      }
+    }
+  });
+
+  return result;
 };

@@ -55,7 +55,7 @@ export const Board: FC<IBoard> = ({
   const [score, setScore] = useState(0);
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
-  const [randomWord, setRandomWord] = useState("ROUGED");
+  const [randomWord, setRandomWord] = useState("SPOONS");
 
   // ---------- UseEffects -----------
   useEffect(() => {
@@ -102,25 +102,28 @@ export const Board: FC<IBoard> = ({
 
   const enterGuess = async (guess: string) => {
     let correct = await checkWord(guess);
+
     if (correct) {
       setIncorrectWord(false);
       setGuessNumber(guessNumber + 1);
       const winningWord = checkForMatch(
         randomWord,
-        inputs,
+        guess,
+        guessNumber,
         blockColours,
-        setBlockColours,
-        guessNumber
+        setBlockColours
       );
+      console.log(guessNumber, winningWord);
       if (winningWord) {
         setScore(guessNumber + 1);
         setTimeout(() => {
           setGameWon(true);
           setEnableInput(false);
         }, 1000);
-      } else if (!winningWord && guessNumber >= 6) {
+      } else if (!winningWord && guessNumber >= 5) {
         setTimeout(() => {
           setGameLost(true);
+          setEnableInput(false);
         }, 1000);
       }
       setEnableInput(true);

@@ -6,13 +6,15 @@ export const checkWord = async (word: string) => {
     let res = await axios.get(
       `${reqUrl}/${word}?key=${process.env.REACT_APP_DICTIONARY_KEY}`
     );
-    let resWord = res.data[0].meta.id.split(":")[0];
-    let resWordStems = res.data[0].meta.stems;
+    let resWord = res.data[0].meta.id.split(":")[0].toLocaleLowerCase();
+    let resWordStems = res.data[0].meta.stems.map((el: string) =>
+      el.toLocaleLowerCase()
+    );
 
-    if (resWord.length === 6 && resWord === word.toLowerCase()) {
+    if (resWord.length === 6 && resWord === word.toLocaleLowerCase()) {
       return true;
     } else if (
-      word.toLowerCase().includes(resWord) &&
+      word.toLocaleLowerCase().includes(resWord) &&
       resWordStems.includes(word.toLowerCase())
     ) {
       return true;

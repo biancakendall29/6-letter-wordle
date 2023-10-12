@@ -29,7 +29,7 @@ export const HeaderText = styled.div`
 export const CloseIcon = styled.button`
   color: ${defaultTheme.textSecondary};
   background-color: transparent;
-  font-size: 1.2rem;
+  font-size: 2rem;
   border: none;
   top: 0;
 
