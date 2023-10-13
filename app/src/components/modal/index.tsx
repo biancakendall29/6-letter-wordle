@@ -1,12 +1,8 @@
 import { FC } from "react";
-import {
-  CloseIcon,
-  Content,
-  Header,
-  HeaderText,
-  Wrapper,
-} from "./styled-components";
+import * as Styled from "./styled-components";
 import ReactDOM from "react-dom";
+import { CloseIcon } from "../glyphs/close";
+import { defaultTheme } from "../../constants/theme";
 
 interface ModalProps {
   isShown: boolean;
@@ -23,13 +19,20 @@ export const Modal: FC<ModalProps> = ({
 }) => {
   const modal = (
     <>
-      <Wrapper>
-        <Header>
-          <HeaderText>{headerText}</HeaderText>
-          <CloseIcon onClick={hide}>x</CloseIcon>
-        </Header>
-        <Content>{modalContent}</Content>
-      </Wrapper>
+      <Styled.Wrapper>
+        <Styled.Header>
+          <Styled.HeaderText>{headerText}</Styled.HeaderText>
+          <Styled.CloseIcon onClick={hide}>
+            <CloseIcon
+              icon
+              iconSize={36}
+              title="Close"
+              fill={defaultTheme.textSecondary}
+            />
+          </Styled.CloseIcon>
+        </Styled.Header>
+        <Styled.Content>{modalContent}</Styled.Content>
+      </Styled.Wrapper>
     </>
   );
 

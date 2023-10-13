@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Modal } from ".";
-import { Score, Button, Container } from "./styled-components";
+import * as Styled from "./styled-components";
 
 interface IWinMenu {
   day: number;
@@ -16,16 +16,16 @@ export const WinMenu: FC<IWinMenu> = ({ day, score, todaysWord }) => {
   };
 
   const menuModalContent = (
-    <Container>
-      <h1>Congratulations 🎉 You got today's word 😁</h1>
-      <h1>{todaysWord}</h1>
-      <h2>{`Day ${day}`}</h2>
-      <Score>{`${score} / 6`}</Score>
-
-      <div>
-        <Button onClick={() => console.log("todo share")}>SHARE</Button>
-      </div>
-    </Container>
+    <Styled.Container>
+      <Styled.SubheadingText>
+        Congratulations 🎉 You got {`day ${day}'s`} word 😁
+      </Styled.SubheadingText>
+      <Styled.HeadingText>{todaysWord}</Styled.HeadingText>
+      <Styled.Score>{`${score} / 6`}</Styled.Score>
+      <Styled.Button onClick={() => console.log("todo share")}>
+        SHARE
+      </Styled.Button>
+    </Styled.Container>
   );
 
   return (

@@ -1,12 +1,12 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { FC, useState } from "react";
 import { Modal } from ".";
-import { Button, Container } from "./styled-components";
+import * as Styled from "./styled-components";
 
 interface IStartMenu {
-  setTodaysWord: Dispatch<SetStateAction<string>>;
+  dayCount: number;
 }
 
-export const StartMenu: FC<IStartMenu> = ({ setTodaysWord }) => {
+export const StartMenu: FC<IStartMenu> = ({ dayCount }) => {
   const [isMenuShown, setIsMenuShown] = useState(true);
 
   const handleCloseMenu = () => {
@@ -18,12 +18,24 @@ export const StartMenu: FC<IStartMenu> = ({ setTodaysWord }) => {
   };
 
   const menuModalContent = (
-    <Container>
-      <h1>6-Letter Wordle</h1>
-      <div>
-        <Button onClick={handleClick}>Play</Button>
-      </div>
-    </Container>
+    <Styled.Container>
+      <Styled.HeadingText>6-Letter Wordle</Styled.HeadingText>
+      <Styled.SubheadingText>{`Play day ${dayCount}'s word !`}</Styled.SubheadingText>
+      <h3>
+        A replica of the Times' Wordle game, but with 6-letter words instead of
+        the classic 5-letters
+      </h3>
+      <Styled.KeyContainer>
+        <Styled.GreenKeyText>
+          Correct letter in correct place
+        </Styled.GreenKeyText>
+        <Styled.OrangeKeyText>
+          Correct letter in wrong place
+        </Styled.OrangeKeyText>
+      </Styled.KeyContainer>
+
+      <Styled.Button onClick={handleClick}>Start</Styled.Button>
+    </Styled.Container>
   );
 
   return (

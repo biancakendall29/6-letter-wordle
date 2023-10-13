@@ -1,13 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import {
-  BackspaceSquare,
-  EnterSquare,
-  KeyboardContainer,
-  KeyboardRow1,
-  KeyboardRow2,
-  KeyboardRow3,
-  KeyboardSquare,
-} from "./styled-components";
+import * as Styled from "./styled-components";
 
 interface IKeyboard {
   setSelectedLetter: Dispatch<SetStateAction<string>>;
@@ -83,7 +75,7 @@ export const Keyboard: FC<IKeyboard> = ({
     const arr = [];
     for (let i = 0; i < values.length; i++) {
       arr.push(
-        <KeyboardSquare
+        <Styled.KeyboardSquare
           id={`square-${values[i]}`}
           key={`square-${values[i]}`}
           value={values[i]}
@@ -91,7 +83,7 @@ export const Keyboard: FC<IKeyboard> = ({
           disabled={!enableInput}
         >
           {values[i]}
-        </KeyboardSquare>
+        </Styled.KeyboardSquare>
       );
     }
     return arr;
@@ -102,7 +94,7 @@ export const Keyboard: FC<IKeyboard> = ({
     keyboard.push(generateKey(keyboardKeys[i]));
     if (i === 2) {
       keyboard[i].push(
-        <BackspaceSquare
+        <Styled.BackspaceSquare
           id="backspace"
           value={"Back"}
           key="square-backspace"
@@ -115,10 +107,10 @@ export const Keyboard: FC<IKeyboard> = ({
           }
         >
           <img alt="Backspace" src="/img/backspace_icon.png" width="130%" />
-        </BackspaceSquare>
+        </Styled.BackspaceSquare>
       );
       keyboard[2].unshift(
-        <EnterSquare
+        <Styled.EnterSquare
           id="enter"
           value={"Enter"}
           key="square-enter"
@@ -126,18 +118,18 @@ export const Keyboard: FC<IKeyboard> = ({
           disabled={currentBlock % 6 !== 0 || isStartOfGuess}
         >
           <img alt="Backspace" src="/img/enter_icon.png" width="130%" />
-        </EnterSquare>
+        </Styled.EnterSquare>
       );
     }
   }
 
   return (
     <>
-      <KeyboardContainer>
-        <KeyboardRow1>{keyboard[0]}</KeyboardRow1>
-        <KeyboardRow2>{keyboard[1]}</KeyboardRow2>
-        <KeyboardRow3>{keyboard[2]}</KeyboardRow3>
-      </KeyboardContainer>
+      <Styled.KeyboardContainer>
+        <Styled.KeyboardRow1>{keyboard[0]}</Styled.KeyboardRow1>
+        <Styled.KeyboardRow2>{keyboard[1]}</Styled.KeyboardRow2>
+        <Styled.KeyboardRow3>{keyboard[2]}</Styled.KeyboardRow3>
+      </Styled.KeyboardContainer>
     </>
   );
 };

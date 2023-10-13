@@ -1,7 +1,8 @@
 import { FC, useState } from "react";
 import { Board } from "../board";
 import { Keyboard } from "../keyboard";
-import { PageContainer } from "./styled-components";
+import * as Styled from "./styled-components";
+import { StartMenu } from "../modal/start-menu";
 
 export const Page: FC = () => {
   const [selectedLetter, setSelectedLetter] = useState("");
@@ -17,7 +18,8 @@ export const Page: FC = () => {
 
   return (
     <>
-      <PageContainer>
+      <Styled.PageContainer>
+        <StartMenu dayCount={daysElapsed} />
         <Board
           selectedLetter={selectedLetter}
           currentBlock={currentBlock}
@@ -39,7 +41,7 @@ export const Page: FC = () => {
           incorrectWord={incorrectWord}
           setIncorrectWord={setIncorrectWord}
         />
-      </PageContainer>
+      </Styled.PageContainer>
     </>
   );
 };

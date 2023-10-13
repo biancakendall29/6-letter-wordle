@@ -1,6 +1,6 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { TileColours } from "../word-handling/types";
-import { defaultTheme } from "../../constants/theme";
+import { defaultTheme, device } from "../../constants/theme";
 
 export const BoardContainer = styled.div`
   display: flex;
@@ -8,6 +8,10 @@ export const BoardContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 6rem;
+
+  @media ${device.mobileS_height} {
+    margin-top: 4rem;
+  }
 `;
 
 export const BoardWrapper = styled.div`
@@ -27,6 +31,11 @@ export const BoardGrid = styled.div`
   background-color: ${defaultTheme.backgroundPrimary};
   padding-top: 20px;
   z-index: 2;
+
+  @media ${device.mobileM} {
+    grid-template-columns: repeat(6, 2.5rem);
+    grid-template-rows: repeat(6, 2.5rem);
+  }
 `;
 
 export const FrontCard = styled.div<{
@@ -50,18 +59,10 @@ export const FrontCard = styled.div<{
   align-items: center;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden;
 
-  z-index: 2;
-  transform: rotateY(0deg);
-  transition-delay: 0.4s;
-
-  ${({ flipped }) =>
-    flipped === "true" &&
-    css`
-      transform: rotateY(180deg);
-    `}
+  @media ${device.mobileM} {
+    font-size: 1.5rem;
+  }
 `;
 
 // FOR FLIP ANIMATION

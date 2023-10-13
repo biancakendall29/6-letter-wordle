@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { defaultTheme } from "../../constants/theme";
+import { defaultTheme, device } from "../../constants/theme";
 
 export const KeyboardContainer = styled.div`
   display: flex;
@@ -21,18 +21,30 @@ export const KeyboardRow1 = styled.div`
   grid-template-columns: repeat(10, 2rem);
   grid-template-rows: repeat(1, 3rem);
   margin-top: 40px;
+
+  @media ${device.mobileS_height} {
+    margin-top: 20px;
+  }
 `;
 
 export const KeyboardRow2 = styled(KeyboardRow1)`
   grid-template-columns: repeat(9, 2rem);
   grid-template-rows: repeat(1, 3rem);
   margin-top: 20px;
+
+  @media ${device.mobileS_height} {
+    margin-top: 5px;
+  }
 `;
 
 export const KeyboardRow3 = styled(KeyboardRow1)`
   grid-template-columns: repeat(9, 2rem);
   grid-template-rows: repeat(1, 3rem);
   margin-top: 20px;
+
+  @media ${device.mobileS_height} {
+    margin-top: 5px;
+  }
 `;
 
 export const KeyboardSquare = styled.button`
@@ -46,6 +58,11 @@ export const KeyboardSquare = styled.button`
   align-items: center;
   font-size: 1.2rem;
   text-transform: uppercase;
+
+  @media ${device.mobileS_height} {
+    height: 70%;
+    font-size: 1rem;
+  }
 `;
 
 export const BackspaceSquare = styled(KeyboardSquare)`

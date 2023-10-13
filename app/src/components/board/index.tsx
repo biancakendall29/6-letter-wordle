@@ -1,10 +1,12 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import {
-  FrontCard,
-  BoardContainer,
-  BoardGrid,
-  BoardWrapper,
-} from "./styled-components";
+  Dispatch,
+  FC,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import * as Styled from "./styled-components";
 import { concatenateLetters } from "../word-handling/concat-letters";
 import { checkWord } from "../word-handling/check-word";
 import { checkForMatch } from "../word-handling/check-for-match";
@@ -45,9 +47,9 @@ export const Board: FC<IBoard> = ({
   );
   const [blocks, setBlocks] = useState<JSX.Element[]>(() =>
     inputs.map((entry) => (
-      <FrontCard id={`${entry.id}`} key={`front-${entry.id}`}>
+      <Styled.FrontCard id={`${entry.id}`} key={`front-${entry.id}`}>
         {entry.value}
-      </FrontCard>
+      </Styled.FrontCard>
     ))
   );
   const [guessNumber, setGuessNumber] = useState(0);
@@ -56,6 +58,52 @@ export const Board: FC<IBoard> = ({
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
   const [randomWord, setRandomWord] = useState("SPOONS");
+
+  const newDay = new Date().getDate();
+
+  // ---------- Functions ------------
+
+  const enterGuess = useCallback(
+    async (guess: string) => {
+      let correct = await checkWord(guess);
+
+      if (correct) {
+        setIncorrectWord(false);
+        setGuessNumber(guessNumber + 1);
+        const winningWord = checkForMatch(
+          randomWord,
+          guess,
+          guessNumber,
+          blockColours,
+          setBlockColours
+        );
+        if (winningWord) {
+          setScore(guessNumber + 1);
+          setTimeout(() => {
+            setGameWon(true);
+            setEnableInput(false);
+          }, 1000);
+        } else if (!winningWord && guessNumber >= 5) {
+          setTimeout(() => {
+            setGameLost(true);
+            setEnableInput(false);
+          }, 1000);
+        }
+        setEnableInput(true);
+      } else {
+        setIncorrectWord(true);
+      }
+      setEnterClicked(false);
+    },
+    [
+      blockColours,
+      guessNumber,
+      randomWord,
+      setEnableInput,
+      setEnterClicked,
+      setIncorrectWord,
+    ]
+  );
 
   // ---------- UseEffects -----------
   useEffect(() => {
@@ -70,14 +118,13 @@ export const Board: FC<IBoard> = ({
     if (enterClicked) {
       enterGuess(concatenateLetters(currentBlock - 6, currentBlock, inputs));
     }
-  }, [currentBlock, inputs, enterClicked]);
+  }, [currentBlock, inputs, enterClicked, enterGuess]);
 
   useEffect(() => {
     const updatedBlocks = inputs.map((entry) => {
       const match = blockColours[entry.id - 1];
-
       return (
-        <FrontCard
+        <Styled.FrontCard
           id={`${entry.id}`}
           key={`front-${entry.id}-${match}`}
           background={match && match}
@@ -85,7 +132,7 @@ export const Board: FC<IBoard> = ({
           column={entry.id % 6 === 0 ? 6 : entry.id % 6}
         >
           {entry.value}
-        </FrontCard>
+        </Styled.FrontCard>
       );
     });
     setBlocks(updatedBlocks);
@@ -100,70 +147,36 @@ export const Board: FC<IBoard> = ({
     }
   }, [incorrectWord]);
 
-  const enterGuess = async (guess: string) => {
-    let correct = await checkWord(guess);
-
-    if (correct) {
-      setIncorrectWord(false);
-      setGuessNumber(guessNumber + 1);
-      const winningWord = checkForMatch(
-        randomWord,
-        guess,
-        guessNumber,
-        blockColours,
-        setBlockColours
-      );
-      console.log(guessNumber, winningWord);
-      if (winningWord) {
-        setScore(guessNumber + 1);
-        setTimeout(() => {
-          setGameWon(true);
-          setEnableInput(false);
-        }, 1000);
-      } else if (!winningWord && guessNumber >= 5) {
-        setTimeout(() => {
-          setGameLost(true);
-          setEnableInput(false);
-        }, 1000);
+  useEffect(() => {
+    const fetchRandomWord = async () => {
+      try {
+        let word = "";
+        const baseUrl = process.env.REACT_APP_SERVER_URL;
+        try {
+          const res = await axios.get(`${baseUrl}word-today/`);
+          word = res.data.data.word.name;
+        } catch (error) {
+          console.error(error);
+        }
+        setRandomWord(word);
+      } catch (error) {
+        console.error("Error fetching random word:", error);
       }
-      setEnableInput(true);
-    } else {
-      setIncorrectWord(true);
-    }
-    setEnterClicked(false);
-  };
+    };
 
-  // useEffect(() => {
-  //   const fetchRandomWord = async () => {
-  //     try {
-  //       let word = "";
-  //       const baseUrl = process.env.REACT_APP_SERVER_URL;
-  //       try {
-  //         const res = await axios.get(`${baseUrl}word-today/`);
-  //         console.log(res.data.data.word.name);
-  //         word = res.data.data.word.name;
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //       setRandomWord(word);
-  //     } catch (error) {
-  //       console.error("Error fetching random word:", error);
-  //     }
-  //   };
-
-  //   fetchRandomWord();
-  // }, []);
+    fetchRandomWord();
+  }, [newDay]);
 
   return (
     <>
-      <BoardContainer>
+      <Styled.BoardContainer>
         {alertNonExistingWord && (
           <Alert message="Not in word list !" type={AlertTypes.warning} />
         )}
-        <BoardWrapper>
-          <BoardGrid>{blocks}</BoardGrid>
-        </BoardWrapper>
-      </BoardContainer>
+        <Styled.BoardContainer>
+          <Styled.BoardGrid>{blocks}</Styled.BoardGrid>
+        </Styled.BoardContainer>
+      </Styled.BoardContainer>
       {gameWon && <WinMenu day={day} score={score} todaysWord={randomWord} />}
       {gameLost && <LoseMenu day={day} todaysWord={randomWord} />}
     </>
