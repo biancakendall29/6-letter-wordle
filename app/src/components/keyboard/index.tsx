@@ -41,6 +41,7 @@ export const Keyboard: FC<IKeyboardProps> = ({
     if (backspaceCount > 1) {
       setCurrentBlock(currentBlock - 1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [backspaceCount]);
 
   const handleBackspace = async () => {
