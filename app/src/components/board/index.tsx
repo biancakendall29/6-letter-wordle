@@ -152,7 +152,7 @@ export const Board: FC<IBoardProps> = ({
       try {
         let word = "";
         const baseUrl = `https://${process.env.REACT_APP_SERVER_URL}${
-          process.env.ENVIRONMENT === "production" ? "/" : "/"
+          process.env.ENVIRONMENT === "production" ? "/api" : "/"
         }`;
         try {
           const res = await axios.get(`${baseUrl}word-today/`);
