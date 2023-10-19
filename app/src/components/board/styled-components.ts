@@ -42,7 +42,6 @@ export const FrontCard = styled.div<{
   background?: TileColours;
   row?: number;
   column?: number;
-  flipped?: string;
 }>`
   background-color: ${(props) => props.background};
   color: ${defaultTheme.textPrimary};

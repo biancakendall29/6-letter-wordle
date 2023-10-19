@@ -19,7 +19,7 @@ import { InitialInputs } from "./constants";
 import axios from "axios";
 import { TileInput } from "./types";
 
-interface IBoard {
+interface IBoardProps {
   selectedLetter: string;
   currentBlock: number;
   setEnableInput: Dispatch<SetStateAction<boolean>>;
@@ -30,7 +30,7 @@ interface IBoard {
   setIncorrectWord: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Board: FC<IBoard> = ({
+export const Board: FC<IBoardProps> = ({
   selectedLetter,
   currentBlock,
   setEnableInput,
@@ -177,8 +177,17 @@ export const Board: FC<IBoard> = ({
           <Styled.BoardGrid>{blocks}</Styled.BoardGrid>
         </Styled.BoardContainer>
       </Styled.BoardContainer>
-      {gameWon && <WinMenu day={day} score={score} todaysWord={randomWord} />}
-      {gameLost && <LoseMenu day={day} todaysWord={randomWord} />}
+      {gameWon && (
+        <WinMenu
+          day={day}
+          score={score}
+          todaysWord={randomWord}
+          blocks={blockColours}
+        />
+      )}
+      {gameLost && (
+        <LoseMenu day={day} todaysWord={randomWord} blocks={blockColours} />
+      )}
     </>
   );
 };

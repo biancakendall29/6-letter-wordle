@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import * as Styled from "./styled-components";
 
-interface IKeyboard {
+interface IKeyboardProps {
   setSelectedLetter: Dispatch<SetStateAction<string>>;
   selectedLetter: string;
   setCurrentBlock: Dispatch<SetStateAction<number>>;
@@ -13,7 +13,7 @@ interface IKeyboard {
   setIncorrectWord: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Keyboard: FC<IKeyboard> = ({
+export const Keyboard: FC<IKeyboardProps> = ({
   setSelectedLetter,
   selectedLetter,
   setCurrentBlock,

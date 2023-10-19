@@ -4,14 +4,14 @@ import ReactDOM from "react-dom";
 import { CloseIcon } from "../glyphs/close";
 import { defaultTheme } from "../../constants/theme";
 
-interface ModalProps {
+interface IModalProps {
   isShown: boolean;
   hide: () => void;
   modalContent: JSX.Element;
   headerText?: string;
 }
 
-export const Modal: FC<ModalProps> = ({
+export const Modal: FC<IModalProps> = ({
   isShown,
   hide,
   modalContent,
