@@ -151,7 +151,9 @@ export const Board: FC<IBoardProps> = ({
     const fetchRandomWord = async () => {
       try {
         let word = "";
-        const baseUrl = process.env.REACT_APP_SERVER_URL;
+        const baseUrl = `https://${process.env.REACT_APP_SERVER_URL}${
+          process.env.ENVIRONMENT === "production" ? "/api" : "/"
+        }`;
         try {
           const res = await axios.get(`${baseUrl}word-today/`);
           word = res.data.data.word.name;
