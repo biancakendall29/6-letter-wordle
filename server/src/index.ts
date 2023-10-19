@@ -8,7 +8,7 @@ const wordRouter = require("../src/routes/wordRoutes");
 const todaysWordRouter = require("../src/routes/todaysWordRoutes");
 
 const app = express();
-const port = process.env.SERVER_PORT || "8000";
+const port = process.env.PORT || "8000";
 
 app.use(cors());
 app.use("/", wordRouter);
