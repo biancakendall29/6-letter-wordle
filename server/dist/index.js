@@ -7,21 +7,40 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-const scheduler_1 = require("./utils/scheduler");
-const node_cron_1 = __importDefault(require("node-cron"));
+// import { runCronJob } from "./utils/scheduler";
+// import cron from "node-cron";
+const path_1 = __importDefault(require("path"));
 const wordRouter = require("./routes/wordRoutes");
 const todaysWordRouter = require("./routes/todaysWordRoutes");
+dotenv_1.default.config({ path: "../.env" });
 const app = (0, express_1.default)();
 const port = process.env.PORT || "8000";
-app.use((0, cors_1.default)());
-app.use("/", wordRouter);
-app.use("/word-today", todaysWordRouter);
-dotenv_1.default.config({ path: "../.env" });
 const DB = process.env.DATABASE;
-mongoose_1.default.connect(DB).then(() => console.log("DB connection successful!"));
+app.use((0, cors_1.default)());
+app.use("/api", wordRouter);
+app.use("/api/word-today", todaysWordRouter);
+if (process.env.NODE_ENV === "production") {
+    app.use(express_1.default.static(path_1.default.join(__dirname, "app", "build")));
+    app.get("*", (req, res) => {
+        res.sendFile(path_1.default.join(__dirname, "app", "build", "index.html"));
+    });
+}
+const startServer = async () => {
+    try {
+        await mongoose_1.default.connect(DB);
+        console.log("DB connection successful!");
+        app.listen(port, () => {
+            console.log(`Server is listening on ${port}`);
+        });
+    }
+    catch (err) {
+        console.error("Failed to start server:", err);
+    }
+};
+if (require.main === module) {
+    startServer();
+}
 // Schedule the job to run at midnight every day
-node_cron_1.default.schedule("0 0 * * *", scheduler_1.runCronJob);
-app.listen(port, () => {
-    return console.log(`Server is listening on ${port}`);
-});
+// cron.schedule("0 0 * * *", runCronJob);
+exports.default = app;
 //# sourceMappingURL=index.js.map
