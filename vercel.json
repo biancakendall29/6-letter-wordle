@@ -7,7 +7,7 @@
     },
     {
       "src": "server/package.json",
-      "use": "@vercel/static-build"
+      "use": "@vercel/node"
     }
   ],
   "routes": [
