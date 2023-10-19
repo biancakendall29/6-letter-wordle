@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { runCronJob } from "./utils/scheduler";
 import cron from "node-cron";
-const wordRouter = require("../src/routes/wordRoutes");
-const todaysWordRouter = require("../src/routes/todaysWordRoutes");
+const wordRouter = require("./routes/wordRoutes");
+const todaysWordRouter = require("./routes/todaysWordRoutes");
 
 const app = express();
 const port = process.env.PORT || "8000";
